@@ -1,0 +1,57 @@
+.step-icon {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.document-type-card {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.document-type-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand-primary);
+}
+
+.document-icon {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.document-image {
+  max-width: 80px;
+  max-height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  border-radius: 4px;
+}
+
+.document-image:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}

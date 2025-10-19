@@ -1,0 +1,182 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-5">
+          <div class="text-center mb-5">
+            <div class="register-icon mb-3">
+              <i class="fas fa-user-plus fa-4x text-primary"></i>
+            </div>
+            <h2 class="fw-bold text-primary mb-2">Créer un compte</h2>
+            <p class="text-muted">Rejoignez la communauté DocRetrouvé</p>
+          </div>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName" class="form-label fw-semibold">
+                  <i class="fas fa-user me-2 text-primary"></i>Prénom
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg" 
+                  id="firstName"
+                  formControlName="firstName"
+                  [class.is-invalid]="firstName?.invalid && firstName?.touched"
+                  placeholder="Votre prénom">
+                <div class="invalid-feedback" *ngIf="firstName?.invalid && firstName?.touched">
+                  <span *ngIf="firstName?.errors?.['required']">Le prénom est requis</span>
+                  <span *ngIf="firstName?.errors?.['minlength']">Minimum 2 caractères</span>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="lastName" class="form-label fw-semibold">
+                  <i class="fas fa-user me-2 text-primary"></i>Nom
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg" 
+                  id="lastName"
+                  formControlName="lastName"
+                  [class.is-invalid]="lastName?.invalid && lastName?.touched"
+                  placeholder="Votre nom">
+                <div class="invalid-feedback" *ngIf="lastName?.invalid && lastName?.touched">
+                  <span *ngIf="lastName?.errors?.['required']">Le nom est requis</span>
+                  <span *ngIf="lastName?.errors?.['minlength']">Minimum 2 caractères</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">
+                <i class="fas fa-envelope me-2 text-primary"></i>Email
+              </label>
+              <input 
+                type="email" 
+                class="form-control form-control-lg" 
+                id="email"
+                formControlName="email"
+                [class.is-invalid]="email?.invalid && email?.touched"
+                placeholder="votre@email.com">
+              <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+                <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+                <span *ngIf="email?.errors?.['email']">Format d'email invalide</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="phone" class="form-label fw-semibold">
+                <i class="fas fa-phone me-2 text-primary"></i>Téléphone (optionnel)
+              </label>
+              <input 
+                type="tel" 
+                class="form-control form-control-lg" 
+                id="phone"
+                formControlName="phone"
+                [class.is-invalid]="phone?.invalid && phone?.touched"
+                placeholder="06 12 34 56 78">
+              <div class="invalid-feedback" *ngIf="phone?.invalid && phone?.touched">
+                <span *ngIf="phone?.errors?.['pattern']">Format de téléphone invalide</span>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="password" class="form-label fw-semibold">
+                  <i class="fas fa-lock me-2 text-primary"></i>Mot de passe
+                </label>
+                <div class="input-group">
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'" 
+                    class="form-control form-control-lg" 
+                    id="password"
+                    formControlName="password"
+                    [class.is-invalid]="password?.invalid && password?.touched"
+                    placeholder="Votre mot de passe">
+                  <button 
+                    class="btn btn-outline-secondary" 
+                    type="button" 
+                    (click)="togglePasswordVisibility()">
+                    <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback" *ngIf="password?.invalid && password?.touched">
+                  <span *ngIf="password?.errors?.['required']">Le mot de passe est requis</span>
+                  <span *ngIf="password?.errors?.['minlength']">Minimum 6 caractères</span>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="confirmPassword" class="form-label fw-semibold">
+                  <i class="fas fa-lock me-2 text-primary"></i>Confirmer le mot de passe
+                </label>
+                <div class="input-group">
+                  <input 
+                    [type]="showConfirmPassword ? 'text' : 'password'" 
+                    class="form-control form-control-lg" 
+                    id="confirmPassword"
+                    formControlName="confirmPassword"
+                    [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched"
+                    placeholder="Confirmez votre mot de passe">
+                  <button 
+                    class="btn btn-outline-secondary" 
+                    type="button" 
+                    (click)="toggleConfirmPasswordVisibility()">
+                    <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback" *ngIf="confirmPassword?.invalid && confirmPassword?.touched">
+                  <span *ngIf="confirmPassword?.errors?.['required']">La confirmation est requise</span>
+                  <span *ngIf="confirmPassword?.errors?.['passwordMismatch']">Les mots de passe ne correspondent pas</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="acceptTerms" required>
+                <label class="form-check-label" for="acceptTerms">
+                  J'accepte les <a href="#" class="text-primary">conditions d'utilisation</a> et la <a href="#" class="text-primary">politique de confidentialité</a>
+                </label>
+              </div>
+            </div>
+
+            <div class="d-grid mb-4">
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg"
+                [disabled]="registerForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="fas fa-user-plus me-2"></i>
+                {{ isLoading ? 'Création...' : 'Créer mon compte' }}
+              </button>
+            </div>
+
+            <div class="text-center">
+              <div class="divider mb-3">
+                <span class="divider-text">ou</span>
+              </div>
+              
+              <p class="mb-3">
+                Déjà un compte ? 
+                <a routerLink="/login" class="text-primary fw-semibold text-decoration-none">
+                  Se connecter
+                </a>
+              </p>
+              
+              <div class="d-flex justify-content-center gap-3">
+                <a href="#" class="btn btn-outline-primary">
+                  <i class="fab fa-google me-2"></i>Google
+                </a>
+                <a href="#" class="btn btn-outline-primary">
+                  <i class="fab fa-facebook me-2"></i>Facebook
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

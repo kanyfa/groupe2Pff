@@ -1,0 +1,99 @@
+.document-type-card {
+  padding: 1.5rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--surface);
+  text-align: center;
+}
+
+.document-type-card:hover {
+  border-color: var(--brand-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.document-type-card.selected {
+  border-color: var(--brand-primary);
+  background: rgba(91, 111, 230, 0.1);
+  box-shadow: var(--shadow-md);
+}
+
+.document-icon {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.document-icon-fa {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input:checked {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none;
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  padding: 12px 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.form-label {
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 30px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-outline-secondary {
+  border-radius: 10px;
+  padding: 12px 30px;
+  font-weight: 600;
+}
+
+.text-primary {
+  color: #667eea !important;
+}
+
+.invalid-feedback {
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}

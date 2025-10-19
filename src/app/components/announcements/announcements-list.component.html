@@ -1,0 +1,156 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary mb-0">
+          <i class="fas fa-list me-2"></i>
+          Annonces de documents perdus
+        </h2>
+        <button 
+          class="btn btn-primary"
+          routerLink="/announcements/create">
+          <i class="fas fa-plus me-2"></i>
+          Nouvelle annonce
+        </button>
+      </div>
+
+      <!-- Filtres -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <label class="form-label">Type de document</label>
+              <select class="form-select">
+                <option value="">Tous les types</option>
+                <option *ngFor="let type of documentTypeLabels | keyvalue" [value]="type.key">
+                  {{ type.value }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Lieu</label>
+              <input type="text" class="form-control" placeholder="Rechercher par lieu">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date de perte</label>
+              <input type="date" class="form-control">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <button class="btn btn-outline-primary w-100">
+                <i class="fas fa-search me-2"></i>Rechercher
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Liste des annonces -->
+      <div class="row" *ngIf="!isLoading">
+        <div class="col-lg-6 mb-4" *ngFor="let announcement of announcements">
+          <div class="card h-100 shadow-sm announcement-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="card-title text-primary mb-0">{{ announcement.title }}</h5>
+                <span class="badge" [ngClass]="getStatusBadgeClass(announcement.status)">
+                  {{ getStatusLabel(announcement.status) }}
+                </span>
+              </div>
+
+              <div class="mb-3">
+                <div class="row">
+                  <div class="col-6">
+                    <small class="text-muted">
+                      <i class="fas fa-id-card me-1"></i>
+                      {{ documentTypeLabels[announcement.document?.documentType || announcement.documentType!] }}
+                    </small>
+                  </div>
+                  <div class="col-6">
+                    <small class="text-muted">
+                      <i class="fas fa-calendar me-1"></i>
+                      {{ formatDate(announcement.lossDate || announcement.lostDate!) }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <p class="card-text text-muted mb-3">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                {{ announcement.lossLocation || announcement.lostLocation }}
+              </p>
+
+              <p class="card-text">{{ announcement.description }}</p>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                  <i class="fas fa-user me-1"></i>
+                  {{ announcement.user?.firstName }} {{ announcement.user?.lastName }}
+                </small>
+                <button 
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="viewAnnouncement(announcement.id!)">
+                  <i class="fas fa-eye me-1"></i>
+                  Voir détails
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="text-center py-5" *ngIf="isLoading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-3 text-muted">Chargement des annonces...</p>
+      </div>
+
+      <!-- Pagination -->
+      <nav *ngIf="totalPages > 1 && !isLoading">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 0">
+            <button 
+              class="page-link" 
+              (click)="onPageChange(currentPage - 1)"
+              [disabled]="currentPage === 0">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+          </li>
+          
+          <li 
+            class="page-item" 
+            *ngFor="let page of [].constructor(totalPages); let i = index"
+            [class.active]="i === currentPage">
+            <button 
+              class="page-link" 
+              (click)="onPageChange(i)">
+              {{ i + 1 }}
+            </button>
+          </li>
+          
+          <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+            <button 
+              class="page-link" 
+              (click)="onPageChange(currentPage + 1)"
+              [disabled]="currentPage === totalPages - 1">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Message si aucune annonce -->
+      <div class="text-center py-5" *ngIf="announcements.length === 0 && !isLoading">
+        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">Aucune annonce trouvée</h4>
+        <p class="text-muted">Soyez le premier à publier une annonce !</p>
+        <button 
+          class="btn btn-primary"
+          routerLink="/announcements/create">
+          <i class="fas fa-plus me-2"></i>
+          Créer une annonce
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

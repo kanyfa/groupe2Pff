@@ -1,0 +1,100 @@
+.announcement-card {
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.announcement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-title {
+  font-weight: 600;
+  color: #667eea !important;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-outline-primary {
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.pagination .page-link {
+  border-radius: 8px;
+  margin: 0 2px;
+  border: 1px solid #e9ecef;
+  color: #667eea;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #667eea;
+  border-color: #667eea;
+}
+
+.pagination .page-link:hover {
+  background-color: #f8f9fa;
+  border-color: #667eea;
+}
+
+.text-primary {
+  color: #667eea !important;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}

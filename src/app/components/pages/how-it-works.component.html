@@ -1,0 +1,173 @@
+ <div class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">Comment ça marche ?</h1>
+        <p class="lead text-muted">Découvrez comment utiliser DocRetrouvé pour retrouver vos documents perdus</p>
+      </div>
+
+      <!-- Étapes principales -->
+      <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+          <div class="card h-100 text-center border-0 shadow-sm">
+            <div class="card-body p-4">
+              <div class="step-icon mb-3">
+                <i class="fas fa-user-plus fa-3x text-primary"></i>
+              </div>
+              <h4 class="fw-bold mb-3">1. Créez votre compte</h4>
+              <p class="text-muted">Inscrivez-vous gratuitement en quelques minutes avec votre email et vos informations personnelles.</p>
+              <a href="#" class="btn btn-outline-primary" routerLink="/register">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+          <div class="card h-100 text-center border-0 shadow-sm">
+            <div class="card-body p-4">
+              <div class="step-icon mb-3">
+                <i class="fas fa-file-signature fa-3x text-primary"></i>
+              </div>
+              <h4 class="fw-bold mb-3">2. Déclarez votre perte</h4>
+              <p class="text-muted">Remplissez le formulaire avec les détails de votre document perdu : type, lieu, date, description.</p>
+              <a href="#" class="btn btn-outline-primary" routerLink="/announcements/create">Déclarer une perte</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+          <div class="card h-100 text-center border-0 shadow-sm">
+            <div class="card-body p-4">
+              <div class="step-icon mb-3">
+                <i class="fas fa-search fa-3x text-primary"></i>
+              </div>
+              <h4 class="fw-bold mb-3">3. Recherchez et contactez</h4>
+              <p class="text-muted">Parcourez les annonces publiées et contactez directement les personnes qui ont trouvé votre document.</p>
+              <a href="#" class="btn btn-outline-primary" routerLink="/announcements">Rechercher</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fonctionnalités détaillées -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-shield-alt me-2"></i>Sécurité et confidentialité
+              </h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Données chiffrées et sécurisées</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Authentification sécurisée</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Respect du RGPD</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Modération des annonces</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>Communauté solidaire
+              </h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Entraide entre citoyens</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Notifications automatiques</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Messagerie intégrée</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Suivi des annonces</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Types de documents -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <h3 class="text-center mb-4">Types de documents supportés</h3>
+          <div class="row">
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="text-center document-type-card">
+                <div class="document-icon mb-3">
+                  <i class="fas fa-id-card fa-3x text-primary"></i>
+                </div>
+                <h5 class="mb-2">Carte Nationale d'Identité</h5>
+                <p class="text-muted small">CNI sénégalaise ou étrangère</p>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="text-center document-type-card">
+                <div class="document-icon mb-3">
+                  <i class="fas fa-passport fa-3x text-danger"></i>
+                </div>
+                <h5 class="mb-2">Passeport</h5>
+                <p class="text-muted small">Passeport sénégalais ou étranger</p>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="text-center document-type-card">
+                <div class="document-icon mb-3">
+                  <i class="fas fa-car fa-3x text-success"></i>
+                </div>
+                <h5 class="mb-2">Certificat d'Immatriculation</h5>
+                <p class="text-muted small">Carte grise véhicule</p>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="text-center document-type-card">
+                <div class="document-icon mb-3">
+                  <i class="fas fa-graduation-cap fa-3x text-warning"></i>
+                </div>
+                <h5 class="mb-2">Diplôme/Certificat</h5>
+                <p class="text-muted small">Certificats et diplômes</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row mt-4">
+            <div class="col-md-4 col-sm-6 mb-3">
+              <div class="text-center document-type-card">
+                <div class="document-icon mb-3">
+                  <i class="fas fa-id-badge fa-3x text-info"></i>
+                </div>
+                <h5 class="mb-2">Permis de Conduire</h5>
+                <p class="text-muted small">Permis sénégalais ou international</p>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-3">
+              <div class="text-center document-type-card">
+                <div class="document-icon mb-3">
+                  <i class="fas fa-heartbeat fa-3x text-success"></i>
+                </div>
+                <h5 class="mb-2">Carte d'Assurance Maladie</h5>
+                <p class="text-muted small">Carte de sécurité sociale</p>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-3">
+              <div class="text-center document-type-card">
+                <div class="document-icon mb-3">
+                  <i class="fas fa-file-alt fa-3x text-secondary"></i>
+                </div>
+                <h5 class="mb-2">Autre Document</h5>
+                <p class="text-muted small">Documents administratifs divers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA final -->
+      <div class="text-center mt-5">
+        <h4 class="mb-3">Prêt à commencer ?</h4>
+        <a href="#" class="btn btn-primary btn-lg me-3" routerLink="/register">Créer un compte</a>
+        <a href="#" class="btn btn-outline-primary btn-lg" routerLink="/announcements">Voir les annonces</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,206 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary mb-0">
+          <i class="fas fa-tachometer-alt me-2"></i>
+          Tableau de bord administrateur
+        </h2>
+      </div>
+
+      <!-- Statistiques -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white shadow-lg">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="mb-0">{{ statistics.totalAnnouncements || 0 }}</h4>
+                  <p class="mb-0">Annonces totales</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-list fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white shadow-lg">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="mb-0">{{ statistics.resolvedAnnouncements || 0 }}</h4>
+                  <p class="mb-0">Résolues</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-check-circle fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white shadow-lg">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="mb-0">{{ statistics.totalUsers || 0 }}</h4>
+                  <p class="mb-0">Utilisateurs</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-users fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white shadow-lg">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="mb-0">{{ statistics.pendingAnnouncements || 0 }}</h4>
+                  <p class="mb-0">En attente</p>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-clock fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Annonces à modérer -->
+        <div class="col-lg-6 mb-4">
+          <div class="card shadow-lg border-0">
+            <div class="card-header bg-warning text-dark">
+              <h5 class="mb-0">
+                <i class="fas fa-exclamation-triangle me-2"></i>Annonces à modérer
+              </h5>
+            </div>
+            
+            <div class="card-body">
+              <div class="announcement-item" *ngFor="let announcement of announcements">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="mb-0">{{ announcement.title }}</h6>
+                  <small class="text-muted">{{ formatDate(announcement.createdAt!) }}</small>
+                </div>
+                
+                <p class="text-muted small mb-2">{{ announcement.description | slice:0:100 }}...</p>
+                
+                <div class="d-flex gap-2">
+                  <button 
+                    class="btn btn-success btn-sm"
+                    (click)="approveAnnouncement(announcement.id!)">
+                    <i class="fas fa-check me-1"></i>Approuver
+                  </button>
+                  <button 
+                    class="btn btn-danger btn-sm"
+                    (click)="rejectAnnouncement(announcement.id!)">
+                    <i class="fas fa-times me-1"></i>Rejeter
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-center py-3" *ngIf="announcements.length === 0">
+                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                <p class="text-muted mb-0">Aucune annonce en attente</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Utilisateurs récents -->
+        <div class="col-lg-6 mb-4">
+          <div class="card shadow-lg border-0">
+            <div class="card-header bg-info text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>Utilisateurs récents
+              </h5>
+            </div>
+            
+            <div class="card-body">
+              <div class="user-item" *ngFor="let user of users">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
+                    <div>
+                      <h6 class="mb-0">{{ user.firstName }} {{ user.lastName }}</h6>
+                      <small class="text-muted">{{ user.email }}</small>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex gap-1">
+                    <button 
+                      class="btn btn-success btn-sm"
+                      *ngIf="!user.isActive"
+                      (click)="activateUser(user.id!)">
+                      <i class="fas fa-user-check"></i>
+                    </button>
+                    <button 
+                      class="btn btn-warning btn-sm"
+                      *ngIf="user.isActive"
+                      (click)="suspendUser(user.id!)">
+                      <i class="fas fa-user-slash"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <hr class="my-2" *ngIf="user !== users[users.length - 1]">
+              </div>
+
+              <div class="text-center py-3" *ngIf="users.length === 0">
+                <i class="fas fa-users fa-2x text-muted mb-2"></i>
+                <p class="text-muted mb-0">Aucun utilisateur</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions rapides -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-bolt me-2"></i>Actions rapides
+              </h5>
+            </div>
+            
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3 mb-2">
+                  <button class="btn btn-outline-primary w-100">
+                    <i class="fas fa-list me-2"></i>Toutes les annonces
+                  </button>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <button class="btn btn-outline-info w-100">
+                    <i class="fas fa-users me-2"></i>Gestion utilisateurs
+                  </button>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <button class="btn btn-outline-warning w-100">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Modération
+                  </button>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <button class="btn btn-outline-success w-100">
+                    <i class="fas fa-chart-bar me-2"></i>Statistiques
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

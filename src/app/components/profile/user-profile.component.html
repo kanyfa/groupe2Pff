@@ -1,0 +1,221 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-4">
+      <!-- Profil utilisateur -->
+      <div class="card shadow-lg border-0">
+        <div class="card-body text-center">
+          <div class="profile-picture mb-3">
+            <img 
+              *ngIf="user?.profilePicture" 
+              [src]="user?.profilePicture" 
+              [alt]="user?.firstName"
+              class="rounded-circle profile-img">
+            <i 
+              *ngIf="!user?.profilePicture" 
+              class="fas fa-user-circle fa-5x text-primary"></i>
+          </div>
+          
+          <h4 class="mb-1">{{ user?.firstName }} {{ user?.lastName }}</h4>
+          <p class="text-muted mb-3">{{ user?.email }}</p>
+          
+          <div class="d-grid gap-2">
+            <button 
+              class="btn btn-outline-primary"
+              (click)="toggleEdit()">
+              <i class="fas fa-edit me-2"></i>
+              {{ isEditing ? 'Annuler' : 'Modifier le profil' }}
+            </button>
+            
+            <input 
+              type="file" 
+              id="profilePicture" 
+              accept="image/*" 
+              class="d-none"
+              (change)="onFileSelected($event)">
+            <label for="profilePicture" class="btn btn-outline-secondary">
+              <i class="fas fa-camera me-2"></i>
+              Changer la photo
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistiques -->
+      <div class="card shadow-lg border-0 mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-chart-bar me-2"></i>Statistiques
+          </h5>
+        </div>
+        
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="stat-item">
+                <h4 class="text-primary mb-1">3</h4>
+                <small class="text-muted">Annonces</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-item">
+                <h4 class="text-success mb-1">1</h4>
+                <small class="text-muted">Résolues</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions rapides -->
+      <div class="card shadow-lg border-0 mt-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0 text-primary">
+            <i class="fas fa-bolt me-2"></i>Actions rapides
+          </h5>
+        </div>
+        
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" routerLink="/announcements/create">
+              <i class="fas fa-plus me-2"></i>Nouvelle annonce
+            </button>
+            <button class="btn btn-outline-info" routerLink="/announcements/history">
+              <i class="fas fa-history me-2"></i>Mes annonces
+            </button>
+            <button class="btn btn-outline-success" routerLink="/messages">
+              <i class="fas fa-comments me-2"></i>Messages
+            </button>
+            <button class="btn btn-outline-warning" routerLink="/notifications">
+              <i class="fas fa-bell me-2"></i>Notifications
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <!-- Formulaire de profil -->
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-light">
+          <h5 class="mb-0 text-primary">
+            <i class="fas fa-user me-2"></i>Informations personnelles
+          </h5>
+        </div>
+        
+        <div class="card-body p-4">
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName" class="form-label fw-semibold">Prénom</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="firstName"
+                  formControlName="firstName"
+                  [class.is-invalid]="firstName?.invalid && firstName?.touched"
+                  [readonly]="!isEditing"
+                  placeholder="Votre prénom">
+                <div class="invalid-feedback" *ngIf="firstName?.invalid && firstName?.touched">
+                  <span *ngIf="firstName?.errors?.['required']">Le prénom est requis</span>
+                  <span *ngIf="firstName?.errors?.['minlength']">Minimum 2 caractères</span>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="lastName" class="form-label fw-semibold">Nom</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="lastName"
+                  formControlName="lastName"
+                  [class.is-invalid]="lastName?.invalid && lastName?.touched"
+                  [readonly]="!isEditing"
+                  placeholder="Votre nom">
+                <div class="invalid-feedback" *ngIf="lastName?.invalid && lastName?.touched">
+                  <span *ngIf="lastName?.errors?.['required']">Le nom est requis</span>
+                  <span *ngIf="lastName?.errors?.['minlength']">Minimum 2 caractères</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email"
+                formControlName="email"
+                [class.is-invalid]="email?.invalid && email?.touched"
+                [readonly]="!isEditing"
+                placeholder="votre@email.com">
+              <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+                <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+                <span *ngIf="email?.errors?.['email']">Format d'email invalide</span>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="phone" class="form-label fw-semibold">Téléphone</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                id="phone"
+                formControlName="phone"
+                [class.is-invalid]="phone?.invalid && phone?.touched"
+                [readonly]="!isEditing"
+                placeholder="06 12 34 56 78">
+              <div class="invalid-feedback" *ngIf="phone?.invalid && phone?.touched">
+                Format de téléphone invalide
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end" *ngIf="isEditing">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="profileForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="fas fa-save me-2"></i>
+                {{ isLoading ? 'Sauvegarde...' : 'Sauvegarder' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Annonces récentes -->
+      <div class="card shadow-lg border-0 mt-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 text-primary">
+            <i class="fas fa-list me-2"></i>Annonces récentes
+          </h5>
+          <button class="btn btn-primary btn-sm" routerLink="/announcements/create">
+            <i class="fas fa-plus me-1"></i>Nouvelle annonce
+          </button>
+        </div>
+        
+        <div class="card-body">
+          <div class="announcement-item" *ngFor="let announcement of recentAnnouncements">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="mb-1">{{ announcement.title }}</h6>
+                <small class="text-muted">{{ announcement.lostLocation }} • {{ formatDate(announcement.createdAt!) }}</small>
+              </div>
+              <span class="badge" [ngClass]="getStatusBadgeClass(announcement.status)">
+                {{ getStatusLabel(announcement.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="text-center py-3" *ngIf="recentAnnouncements.length === 0">
+            <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+            <p class="text-muted mb-0">Aucune annonce récente</p>
+            <button class="btn btn-primary mt-2" routerLink="/announcements/create">
+              <i class="fas fa-plus me-2"></i>Créer ma première annonce
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,157 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">Contactez-nous</h1>
+        <p class="lead text-muted">Une question ? Un problème ? Notre équipe est là pour vous aider</p>
+      </div>
+
+      <div class="row">
+        <!-- Formulaire de contact -->
+        <div class="col-lg-8 mb-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-envelope me-2"></i>Envoyez-nous un message
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label fw-semibold">Nom complet</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      id="name"
+                      formControlName="name"
+                      [class.is-invalid]="name?.invalid && name?.touched"
+                      placeholder="Votre nom et prénom">
+                    <div class="invalid-feedback" *ngIf="name?.invalid && name?.touched">
+                      <span *ngIf="name?.errors?.['required']">Le nom est requis</span>
+                      <span *ngIf="name?.errors?.['minlength']">Minimum 2 caractères</span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label fw-semibold">Email</label>
+                    <input 
+                      type="email" 
+                      class="form-control" 
+                      id="email"
+                      formControlName="email"
+                      [class.is-invalid]="email?.invalid && email?.touched"
+                      placeholder="votre@email.com">
+                    <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+                      <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+                      <span *ngIf="email?.errors?.['email']">Format d'email invalide</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="subject" class="form-label fw-semibold">Sujet</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="subject"
+                    formControlName="subject"
+                    [class.is-invalid]="subject?.invalid && subject?.touched"
+                    placeholder="Objet de votre message">
+                  <div class="invalid-feedback" *ngIf="subject?.invalid && subject?.touched">
+                    <span *ngIf="subject?.errors?.['required']">Le sujet est requis</span>
+                    <span *ngIf="subject?.errors?.['minlength']">Minimum 5 caractères</span>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label for="message" class="form-label fw-semibold">Message</label>
+                  <textarea 
+                    class="form-control" 
+                    id="message"
+                    formControlName="message"
+                    [class.is-invalid]="message?.invalid && message?.touched"
+                    rows="5"
+                    placeholder="Décrivez votre question ou problème..."></textarea>
+                  <div class="invalid-feedback" *ngIf="message?.invalid && message?.touched">
+                    <span *ngIf="message?.errors?.['required']">Le message est requis</span>
+                    <span *ngIf="message?.errors?.['minlength']">Minimum 10 caractères</span>
+                  </div>
+                </div>
+
+                <div class="d-grid">
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary btn-lg"
+                    [disabled]="contactForm.invalid">
+                    <i class="fas fa-paper-plane me-2"></i>Envoyer le message
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Informations de contact -->
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-info-circle me-2"></i>Informations de contact
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="contact-item mb-3">
+                <i class="fas fa-envelope text-primary me-2"></i>
+                <strong>Email :</strong>
+                <a href="mailto:contact&#64;docretrouve.fr" class="text-decoration-none ms-1">contact&#64;docretrouve.fr</a>
+              </div>
+              
+              <div class="contact-item mb-3">
+                <i class="fas fa-phone text-primary me-2"></i>
+                <strong>Téléphone :</strong>
+                <a href="tel:+33123456789" class="text-decoration-none ms-1">01 23 45 67 89</a>
+              </div>
+              
+              <div class="contact-item mb-3">
+                <i class="fas fa-clock text-primary me-2"></i>
+                <strong>Horaires :</strong>
+                <span class="ms-1">Lun-Ven 9h-18h</span>
+              </div>
+              
+              <div class="contact-item">
+                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                <strong>Adresse :</strong>
+                <span class="ms-1">123 Avenue Léopold Sédar Senghor<br>Dakar, Sénégal</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-question-circle me-2"></i>FAQ rapide
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="faq-item mb-3">
+                <h6 class="fw-bold">Comment supprimer mon compte ?</h6>
+                <p class="small text-muted mb-0">Contactez-nous par email avec votre demande de suppression.</p>
+              </div>
+              
+              <div class="faq-item mb-3">
+                <h6 class="fw-bold">Mes données sont-elles sécurisées ?</h6>
+                <p class="small text-muted mb-0">Oui, toutes vos données sont chiffrées et protégées.</p>
+              </div>
+              
+              <div class="faq-item">
+                <h6 class="fw-bold">Puis-je modifier mes annonces ?</h6>
+                <p class="small text-muted mb-0">Oui, depuis votre profil utilisateur.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

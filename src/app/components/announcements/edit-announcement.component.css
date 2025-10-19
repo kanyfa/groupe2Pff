@@ -1,0 +1,38 @@
+.document-type-card {
+  padding: 1.5rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--surface);
+  text-align: center;
+}
+
+.document-type-card:hover {
+  border-color: var(--brand-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.document-type-card.selected {
+  border-color: var(--brand-primary);
+  background: rgba(91, 111, 230, 0.1);
+  box-shadow: var(--shadow-md);
+}
+
+.document-icon {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.document-icon-fa {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input:checked {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}

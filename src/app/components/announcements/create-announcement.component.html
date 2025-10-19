@@ -1,0 +1,236 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white text-center py-4">
+          <h2 class="mb-0">
+            <i class="fas fa-plus-circle me-2"></i>
+            Déclarer un document perdu
+          </h2>
+          <p class="mb-0 mt-2">Remplissez les informations pour créer votre annonce</p>
+        </div>
+        
+        <div class="card-body p-5">
+          <form [formGroup]="announcementForm" (ngSubmit)="onSubmit()">
+            <!-- Titre -->
+            <div class="mb-4">
+              <label for="title" class="form-label fw-semibold">
+                <i class="fas fa-heading me-2 text-primary"></i>Titre de l'annonce
+              </label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="title"
+                formControlName="title"
+                [class.is-invalid]="title?.invalid && title?.touched"
+                placeholder="Ex: Carte d'identité perdue à Dakar">
+              <div class="invalid-feedback" *ngIf="title?.invalid && title?.touched">
+                <span *ngIf="title?.errors?.['required']">Le titre est requis</span>
+                <span *ngIf="title?.errors?.['minlength']">Minimum 5 caractères</span>
+              </div>
+            </div>
+
+            <!-- Type de document (champ avec suggestions) -->
+            <div class="mb-4">
+              <label for="documentTypeInput" class="form-label fw-semibold">
+                <i class="fas fa-id-card me-2 text-primary"></i>Type de document
+              </label>
+              <input
+                id="documentTypeInput"
+                class="form-control"
+                list="documentTypeOptionsList"
+                placeholder="Commencez à taper (ex: Carte d'identité)"
+                (input)="onDocumentTypeInput($event)"
+                (change)="onDocumentTypeInput($event)"
+                (blur)="onDocumentTypeInput($event)"
+              />
+              <datalist id="documentTypeOptionsList">
+                <option *ngFor="let label of documentTypesList" [value]="label"></option>
+              </datalist>
+              <div class="invalid-feedback d-block" *ngIf="documentType?.invalid && documentType?.touched">
+                Le type de document est requis
+              </div>
+            </div>
+
+            <!-- Titulaire du document -->
+            <div class="mb-4">
+              <label for="holderName" class="form-label fw-semibold">
+                <i class="fas fa-user me-2 text-primary"></i>Nom sur le document
+              </label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="holderName"
+                formControlName="holderName"
+                [class.is-invalid]="holderName?.invalid && holderName?.touched"
+                placeholder="Nom inscrit sur le document">
+              <div class="invalid-feedback" *ngIf="holderName?.invalid && holderName?.touched">
+                <span *ngIf="holderName?.errors?.['required']">Le nom est requis</span>
+                <span *ngIf="holderName?.errors?.['minlength']">Minimum 2 caractères</span>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="holderFirstName" class="form-label fw-semibold">
+                  <i class="fas fa-user me-2 text-primary"></i>Prénom (optionnel)
+                </label>
+                <input type="text" class="form-control" id="holderFirstName" formControlName="holderFirstName" placeholder="Prénom inscrit">
+              </div>
+              <div class="col-md-6">
+                <label for="documentNumber" class="form-label fw-semibold">
+                  <i class="fas fa-hashtag me-2 text-primary"></i>Numéro du document (optionnel)
+                </label>
+                <input type="text" class="form-control" id="documentNumber" formControlName="documentNumber" placeholder="Ex: CI-123456">
+              </div>
+            </div>
+
+            <!-- Date et lieu de perte -->
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="lostDate" class="form-label fw-semibold">
+                  <i class="fas fa-calendar me-2 text-primary"></i>Date de perte
+                </label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="lossDate"
+                  formControlName="lossDate"
+                  [class.is-invalid]="lossDate?.invalid && lossDate?.touched">
+                <div class="invalid-feedback" *ngIf="lossDate?.invalid && lossDate?.touched">
+                  La date de perte est requise
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <label for="lostLocation" class="form-label fw-semibold">
+                  <i class="fas fa-map-marker-alt me-2 text-primary"></i>Lieu de perte
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="lossLocation"
+                  formControlName="lossLocation"
+                  [class.is-invalid]="lossLocation?.invalid && lossLocation?.touched"
+                  placeholder="Ville, quartier, lieu précis">
+                <div class="invalid-feedback" *ngIf="lossLocation?.invalid && lossLocation?.touched">
+                  <span *ngIf="lossLocation?.errors?.['required']">Le lieu est requis</span>
+                  <span *ngIf="lossLocation?.errors?.['minlength']">Minimum 3 caractères</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="lossCity" class="form-label fw-semibold">Ville (optionnel)</label>
+                <input type="text" class="form-control" id="lossCity" formControlName="lossCity" placeholder="Ex: Dakar">
+              </div>
+              <div class="col-md-6">
+                <label for="lossPostalCode" class="form-label fw-semibold">Code postal (optionnel)</label>
+                <input type="text" class="form-control" id="lossPostalCode" formControlName="lossPostalCode" placeholder="Ex: 11000">
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+              <label for="description" class="form-label fw-semibold">
+                <i class="fas fa-align-left me-2 text-primary"></i>Description détaillée
+              </label>
+              <textarea 
+                class="form-control" 
+                id="description"
+                formControlName="description"
+                [class.is-invalid]="description?.invalid && description?.touched"
+                rows="4"
+                placeholder="Décrivez les circonstances de la perte, les détails du document, etc."></textarea>
+              <div class="invalid-feedback" *ngIf="description?.invalid && description?.touched">
+                <span *ngIf="description?.errors?.['required']">La description est requise</span>
+                <span *ngIf="description?.errors?.['minlength']">Minimum 10 caractères</span>
+              </div>
+            </div>
+
+            <!-- Informations de contact -->
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="contactPreference" class="form-label fw-semibold">Préférence de contact</label>
+                <select id="contactPreference" class="form-select" formControlName="contactPreference">
+                  <option value="EMAIL">Email</option>
+                  <option value="PHONE">Téléphone</option>
+                  <option value="BOTH">Les deux</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="contactPhone" class="form-label fw-semibold">
+                  <i class="fas fa-phone me-2 text-primary"></i>Téléphone (optionnel)
+                </label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  id="contactPhone"
+                  formControlName="contactPhone"
+                  [class.is-invalid]="contactPhone?.invalid && contactPhone?.touched"
+                  placeholder="06 12 34 56 78">
+                <div class="invalid-feedback" *ngIf="contactPhone?.invalid && contactPhone?.touched">
+                  Format de téléphone invalide
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <label for="contactEmail" class="form-label fw-semibold">
+                  <i class="fas fa-envelope me-2 text-primary"></i>Email (optionnel)
+                </label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  id="contactEmail"
+                  formControlName="contactEmail"
+                  [class.is-invalid]="contactEmail?.invalid && contactEmail?.touched"
+                  placeholder="votre@email.com">
+                <div class="invalid-feedback" *ngIf="contactEmail?.invalid && contactEmail?.touched">
+                  Format d'email invalide
+                </div>
+              </div>
+            </div>
+
+            <div class="form-check form-switch mb-4">
+              <input class="form-check-input" type="checkbox" id="isUrgent" formControlName="isUrgent">
+              <label class="form-check-label" for="isUrgent">Marquer comme urgent</label>
+            </div>
+
+            <!-- Image -->
+            <div class="mb-4">
+              <label for="imageUrl" class="form-label fw-semibold">
+                <i class="fas fa-image me-2 text-primary"></i>URL de l'image (optionnel)
+              </label>
+              <input 
+                type="url" 
+                class="form-control" 
+                id="imageUrl"
+                formControlName="imageUrl"
+                placeholder="https://exemple.com/image.jpg">
+            </div>
+
+            <!-- Boutons -->
+            <div class="d-flex justify-content-between">
+              <button 
+                type="button" 
+                class="btn btn-outline-secondary"
+                routerLink="/announcements">
+                <i class="fas fa-arrow-left me-2"></i>Annuler
+              </button>
+              
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg"
+                [disabled]="announcementForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="fas fa-paper-plane me-2"></i>
+                {{ isLoading ? 'Création...' : 'Publier l\'annonce' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
