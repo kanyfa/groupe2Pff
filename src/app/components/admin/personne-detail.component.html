@@ -1,0 +1,174 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Loading Spinner -->
+            <div *ngIf="isLoading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+            </div>
+
+            <!-- Personne Details -->
+            <div *ngIf="!isLoading && personne" class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Détails de la personne
+                        </h4>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-light btn-sm" (click)="onBack()">
+                                <i class="fas fa-arrow-left me-1"></i>Retour
+                            </button>
+                            <button class="btn btn-warning btn-sm" (click)="onEdit()">
+                                <i class="fas fa-edit me-1"></i>Modifier
+                            </button>
+                            <button class="btn btn-danger btn-sm" (click)="onDelete()">
+                                <i class="fas fa-trash me-1"></i>Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Profile Section -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="text-center">
+                                <div
+                                    class="avatar-lg bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+                                    {{ personne.firstName.charAt(0) }}{{ personne.lastName.charAt(0) }}
+                                </div>
+                                <h5 class="mb-1">{{ personne.firstName }} {{ personne.lastName }}</h5>
+                                <p class="text-muted mb-3">ID: {{ personne.id }}</p>
+
+                                <!-- Status Badge -->
+                                <div class="mb-3">
+                                    <span class="badge fs-6 px-3 py-2" [class.bg-success]="personne.isVerified"
+                                        [class.bg-warning]="!personne.isVerified">
+                                        <i class="fas fa-check me-1" *ngIf="personne.isVerified"></i>
+                                        <i class="fas fa-clock me-1" *ngIf="!personne.isVerified"></i>
+                                        {{ personne.isVerified ? 'Vérifié' : 'En attente de vérification' }}
+                                    </span>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" *ngIf="!personne.isVerified"
+                                        (click)="verifyPersonne()">
+                                        <i class="fas fa-check me-2"></i>Vérifier
+                                    </button>
+                                    <button class="btn btn-warning" *ngIf="personne.isVerified"
+                                        (click)="unverifyPersonne()">
+                                        <i class="fas fa-times me-2"></i>Annuler vérification
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Details Section -->
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100 border-0 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title text-primary">
+                                                <i class="fas fa-user me-2"></i>Informations personnelles
+                                            </h6>
+                                            <div class="mb-2">
+                                                <strong>Prénom:</strong> {{ personne.firstName }}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Nom:</strong> {{ personne.lastName }}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Email:</strong>
+                                                <a href="mailto:{{ personne.email }}" class="text-decoration-none">
+                                                    {{ personne.email }}
+                                                </a>
+                                            </div>
+                                            <div class="mb-0">
+                                                <strong>Téléphone:</strong>
+                                                <span *ngIf="personne.phone">{{ personne.phone }}</span>
+                                                <span *ngIf="!personne.phone" class="text-muted">Non spécifié</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100 border-0 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title text-primary">
+                                                <i class="fas fa-map-marker-alt me-2"></i>Adresse
+                                            </h6>
+                                            <div class="mb-2">
+                                                <strong>Adresse:</strong>
+                                                <span *ngIf="personne.address">{{ personne.address }}</span>
+                                                <span *ngIf="!personne.address" class="text-muted">Non spécifiée</span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Ville:</strong> {{ personne.city }}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Code postal:</strong>
+                                                <span *ngIf="personne.postalCode">{{ personne.postalCode }}</span>
+                                                <span *ngIf="!personne.postalCode" class="text-muted">Non
+                                                    spécifié</span>
+                                            </div>
+                                            <div class="mb-0">
+                                                <strong>Pays:</strong> {{ personne.country }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card border-0 bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title text-primary">
+                                                <i class="fas fa-info-circle me-2"></i>Informations supplémentaires
+                                            </h6>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <strong>Date de création:</strong>
+                                                    <span *ngIf="personne.createdAt">{{ personne.createdAt |
+                                                        date:'dd/MM/yyyy à HH:mm' }}</span>
+                                                    <span *ngIf="!personne.createdAt" class="text-muted">Non
+                                                        disponible</span>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <strong>Dernière modification:</strong>
+                                                    <span *ngIf="personne.updatedAt">{{ personne.updatedAt |
+                                                        date:'dd/MM/yyyy à HH:mm' }}</span>
+                                                    <span *ngIf="!personne.updatedAt" class="text-muted">Non
+                                                        disponible</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div *ngIf="!isLoading && !personne" class="text-center py-5">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <h5 class="text-muted">Personne non trouvée</h5>
+                        <p class="text-muted">La personne demandée n'existe pas ou a été supprimée.</p>
+                        <button class="btn btn-primary" (click)="onBack()">
+                            <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

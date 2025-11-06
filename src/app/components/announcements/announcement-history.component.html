@@ -1,15 +1,28 @@
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="page-title">
+          <i class="fas fa-history me-3"></i>Mes annonces
+        </h1>
+        <p class="page-subtitle">
+          Gérez vos annonces publiées et suivez leur évolution
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <button class="btn btn-outline-light" routerLink="/announcements/create">
+          <i class="fas fa-plus me-2"></i>Créer une annonce
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
 <div class="container py-5">
   <div class="row">
     <div class="col-12">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary mb-0">
-          <i class="fas fa-history me-2"></i>
-          Historique de mes annonces
-        </h2>
-        <button class="btn btn-primary" routerLink="/announcements/create">
-          <i class="fas fa-plus me-2"></i>Nouvelle annonce
-        </button>
-      </div>
 
       <!-- Statistiques rapides -->
       <div class="row mb-4">
@@ -62,8 +75,8 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start mb-3">
                 <h5 class="card-title text-primary mb-0">{{ announcement.title }}</h5>
-                <span class="badge" [ngClass]="getStatusBadgeClass(announcement.status)">
-                  {{ getStatusLabel(announcement.status) }}
+                <span class="badge" [ngClass]="getStatusBadgeClass(announcement.status!)">
+                  {{ getStatusLabel(announcement.status!) }}
                 </span>
               </div>
 
@@ -78,7 +91,7 @@
                   <div class="col-6">
                     <small class="text-muted">
                       <i class="fas fa-calendar me-1"></i>
-                      {{ formatDate(announcement.lossDate || announcement.lostDate!) }}
+                      {{ formatDate(announcement.lossDate!) }}
                     </small>
                   </div>
                 </div>
@@ -86,7 +99,7 @@
 
               <p class="card-text text-muted mb-3">
                 <i class="fas fa-map-marker-alt me-1"></i>
-                {{ announcement.lossLocation || announcement.lostLocation }}
+                {{ announcement.lossLocation }}
               </p>
 
               <p class="card-text">{{ announcement.description }}</p>
@@ -96,24 +109,18 @@
                   <i class="fas fa-clock me-1"></i>
                   Créée le {{ formatDate(announcement.createdAt!) }}
                 </small>
-                
+
                 <div class="btn-group" role="group">
-                  <button 
-                    class="btn btn-outline-primary btn-sm"
-                    routerLink="/announcements/{{ announcement.id }}">
+                  <button class="btn btn-outline-primary btn-sm" routerLink="/announcements/{{ announcement.id }}">
                     <i class="fas fa-eye me-1"></i>Voir
                   </button>
-                  
-                  <button 
-                    class="btn btn-outline-success btn-sm"
-                    *ngIf="announcement.status === 'ACTIVE'"
+
+                  <button class="btn btn-outline-success btn-sm" *ngIf="announcement.status === 'ACTIVE'"
                     (click)="markAsResolved(announcement.id!)">
                     <i class="fas fa-check me-1"></i>Résoudre
                   </button>
-                  
-                  <button 
-                    class="btn btn-outline-danger btn-sm"
-                    (click)="deleteAnnouncement(announcement.id!)">
+
+                  <button class="btn btn-outline-danger btn-sm" (click)="deleteAnnouncement(announcement.id!)">
                     <i class="fas fa-trash me-1"></i>Supprimer
                   </button>
                 </div>

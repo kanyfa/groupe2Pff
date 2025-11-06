@@ -1,0 +1,245 @@
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-users me-2"></i>Gestion des Utilisateurs
+                        </h4>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-light btn-sm" (click)="showCreateAdminModal = true">
+                                <i class="fas fa-user-shield me-1"></i>Créer Admin
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <!-- Search -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Rechercher par nom, email..."
+                                    [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+                                <button class="btn btn-outline-primary" type="button" (click)="onSearch()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" type="button" (click)="clearSearch()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading Spinner -->
+                    <div *ngIf="isLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div *ngIf="!isLoading" class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Rôle</th>
+                                    <th>Statut</th>
+                                    <th>Date d'inscription</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of getPaginatedUsers()">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div
+                                                class="avatar-sm bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">{{ user.firstName }} {{ user.lastName }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="mailto:{{ user.email }}" class="text-decoration-none">
+                                            {{ user.email }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">{{ user.role || 'USER' }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge" [class.bg-success]="user.isActive"
+                                            [class.bg-danger]="!user.isActive">
+                                            <i class="fas fa-circle me-1" style="font-size: 0.5em;"></i>
+                                            {{ user.isActive ? 'Actif' : 'Suspendu' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ user.createdAt ? (user.createdAt | date:'dd/MM/yyyy') : 'N/A' }}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button class="btn btn-outline-success" *ngIf="!user.isActive"
+                                                (click)="activateUser(user.id!)">
+                                                <i class="fas fa-user-check"></i>
+                                            </button>
+                                            <button class="btn btn-outline-warning" *ngIf="user.isActive"
+                                                (click)="suspendUser(user.id!)">
+                                                <i class="fas fa-user-slash"></i>
+                                            </button>
+                                            <button class="btn btn-outline-danger" (click)="deleteUser(user.id!)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Empty State -->
+                        <div *ngIf="filteredUsers.length === 0" class="text-center py-5">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Aucun utilisateur trouvé</h5>
+                            <p class="text-muted">Aucun utilisateur ne correspond à votre recherche.</p>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav *ngIf="totalPages > 1" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" [class.disabled]="currentPage === 0">
+                                <button class="page-link" (click)="onPageChange(currentPage - 1)"
+                                    [disabled]="currentPage === 0">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                            </li>
+
+                            <li *ngFor="let page of getPageNumbers()" class="page-item"
+                                [class.active]="page === currentPage">
+                                <button class="page-link" (click)="onPageChange(page)">
+                                    {{ page + 1 }}
+                                </button>
+                            </li>
+
+                            <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+                                <button class="page-link" (click)="onPageChange(currentPage + 1)"
+                                    [disabled]="currentPage === totalPages - 1">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <!-- Results Info -->
+                    <div class="text-muted text-center mt-3">
+                        Affichage de {{ getPaginatedUsers().length }} utilisateur(s) sur {{ totalElements }} total
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Admin Modal -->
+<div class="modal fade" [class.show]="showCreateAdminModal" [style.display]="showCreateAdminModal ? 'block' : 'none'"
+    tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-shield me-2"></i>Créer un Administrateur
+                </h5>
+                <button type="button" class="btn-close" (click)="closeCreateAdminModal()"></button>
+            </div>
+            <form [formGroup]="adminForm" (ngSubmit)="createAdmin()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="adminFirstName" class="form-label">Prénom *</label>
+                            <input type="text" class="form-control" id="adminFirstName" formControlName="firstName"
+                                [class.is-invalid]="adminForm.get('firstName')?.invalid && adminForm.get('firstName')?.touched">
+                            <div class="invalid-feedback"
+                                *ngIf="adminForm.get('firstName')?.invalid && adminForm.get('firstName')?.touched">
+                                Le prénom est requis
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="adminLastName" class="form-label">Nom *</label>
+                            <input type="text" class="form-control" id="adminLastName" formControlName="lastName"
+                                [class.is-invalid]="adminForm.get('lastName')?.invalid && adminForm.get('lastName')?.touched">
+                            <div class="invalid-feedback"
+                                *ngIf="adminForm.get('lastName')?.invalid && adminForm.get('lastName')?.touched">
+                                Le nom est requis
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="adminEmail" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="adminEmail" formControlName="email"
+                            [class.is-invalid]="adminForm.get('email')?.invalid && adminForm.get('email')?.touched">
+                        <div class="invalid-feedback"
+                            *ngIf="adminForm.get('email')?.invalid && adminForm.get('email')?.touched">
+                            <span *ngIf="adminForm.get('email')?.errors?.['required']">L'email est requis</span>
+                            <span *ngIf="adminForm.get('email')?.errors?.['email']">Format d'email invalide</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="adminPhone" class="form-label">Téléphone *</label>
+                        <input type="tel" class="form-control" id="adminPhone" formControlName="phone"
+                            [class.is-invalid]="adminForm.get('phone')?.invalid && adminForm.get('phone')?.touched">
+                        <div class="invalid-feedback"
+                            *ngIf="adminForm.get('phone')?.invalid && adminForm.get('phone')?.touched">
+                            Le téléphone est requis
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="adminPassword" class="form-label">Mot de passe *</label>
+                        <input type="password" class="form-control" id="adminPassword" formControlName="password"
+                            [class.is-invalid]="adminForm.get('password')?.invalid && adminForm.get('password')?.touched">
+                        <div class="invalid-feedback"
+                            *ngIf="adminForm.get('password')?.invalid && adminForm.get('password')?.touched">
+                            <span *ngIf="adminForm.get('password')?.errors?.['required']">Le mot de passe est
+                                requis</span>
+                            <span *ngIf="adminForm.get('password')?.errors?.['minlength']">Minimum 6 caractères</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="adminConfirmPassword" class="form-label">Confirmer le mot de passe *</label>
+                        <input type="password" class="form-control" id="adminConfirmPassword"
+                            formControlName="confirmPassword"
+                            [class.is-invalid]="adminForm.get('confirmPassword')?.invalid && adminForm.get('confirmPassword')?.touched">
+                        <div class="invalid-feedback"
+                            *ngIf="adminForm.get('confirmPassword')?.invalid && adminForm.get('confirmPassword')?.touched">
+                            <span *ngIf="adminForm.get('confirmPassword')?.errors?.['required']">La confirmation est
+                                requise</span>
+                            <span *ngIf="adminForm.get('confirmPassword')?.errors?.['passwordMismatch']">Les mots de
+                                passe ne correspondent pas</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeCreateAdminModal()">Annuler</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="adminForm.invalid || isCreatingAdmin">
+                        <span *ngIf="isCreatingAdmin" class="spinner-border spinner-border-sm me-2"></span>
+                        <i class="fas fa-user-shield me-2"></i>
+                        {{ isCreatingAdmin ? 'Création...' : 'Créer Administrateur' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Backdrops -->
+<div class="modal-backdrop fade show" *ngIf="showCreateAdminModal"></div>

@@ -226,3 +226,6 @@ SELECT 'Base de données docufind créée avec succès!' as message;
 SELECT COUNT(*) as total_tables FROM information_schema.tables WHERE table_schema = 'docufind';
 SELECT COUNT(*) as total_users FROM users;
 SELECT COUNT(*) as total_document_types FROM document_types;
+
+
+

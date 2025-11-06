@@ -1,41 +1,62 @@
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="page-title">
+          <i class="fas fa-user me-3"></i>Mon profil
+        </h1>
+        <p class="page-subtitle">
+          Gérez vos informations personnelles et consultez vos annonces
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <button class="btn btn-outline-light" routerLink="/announcements">
+          <i class="fas fa-arrow-left me-2"></i>
+          Retour aux annonces
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
 <div class="container py-5">
   <div class="row">
     <div class="col-lg-4">
-      <!-- Profil utilisateur -->
-      <div class="card shadow-lg border-0">
+      <!-- Profile Card -->
+      <div class="profile-card">
         <div class="card-body text-center">
-          <div class="profile-picture mb-3">
-            <img 
-              *ngIf="user?.profilePicture" 
-              [src]="user?.profilePicture" 
-              [alt]="user?.firstName"
-              class="rounded-circle profile-img">
-            <i 
-              *ngIf="!user?.profilePicture" 
-              class="fas fa-user-circle fa-5x text-primary"></i>
+          <div class="profile-avatar mb-4">
+            <div class="avatar-container">
+              <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" [alt]="user?.firstName"
+                class="avatar-image">
+              <div class="avatar-placeholder" *ngIf="!user?.profilePicture">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="avatar-overlay">
+                <input type="file" id="profilePicture" accept="image/*" class="d-none"
+                  (change)="onFileSelected($event)">
+                <label for="profilePicture" class="avatar-upload-btn">
+                  <i class="fas fa-camera"></i>
+                </label>
+              </div>
+            </div>
           </div>
-          
-          <h4 class="mb-1">{{ user?.firstName }} {{ user?.lastName }}</h4>
-          <p class="text-muted mb-3">{{ user?.email }}</p>
-          
+
+          <h4 class="profile-name mb-2">{{ user?.firstName }} {{ user?.lastName }}</h4>
+          <p class="profile-email text-muted mb-4">{{ user?.email }}</p>
+
+          <div class="member-since mb-4">
+            <i class="fas fa-calendar-check text-primary me-2"></i>
+            <small class="text-muted">Membre depuis {{ formatDate(user?.createdAt!) }}</small>
+          </div>
+
           <div class="d-grid gap-2">
-            <button 
-              class="btn btn-outline-primary"
-              (click)="toggleEdit()">
+            <button class="btn btn-primary" (click)="toggleEdit()">
               <i class="fas fa-edit me-2"></i>
-              {{ isEditing ? 'Annuler' : 'Modifier le profil' }}
+              {{ isEditing ? 'Annuler les modifications' : 'Modifier le profil' }}
             </button>
-            
-            <input 
-              type="file" 
-              id="profilePicture" 
-              accept="image/*" 
-              class="d-none"
-              (change)="onFileSelected($event)">
-            <label for="profilePicture" class="btn btn-outline-secondary">
-              <i class="fas fa-camera me-2"></i>
-              Changer la photo
-            </label>
           </div>
         </div>
       </div>
@@ -47,7 +68,7 @@
             <i class="fas fa-chart-bar me-2"></i>Statistiques
           </h5>
         </div>
-        
+
         <div class="card-body">
           <div class="row text-center">
             <div class="col-6">
@@ -66,28 +87,164 @@
         </div>
       </div>
 
-      <!-- Actions rapides -->
+      <!-- Messages et Notifications -->
       <div class="card shadow-lg border-0 mt-4">
         <div class="card-header bg-light">
           <h5 class="mb-0 text-primary">
-            <i class="fas fa-bolt me-2"></i>Actions rapides
+            <i class="fas fa-comments me-2"></i>Messages et Notifications
           </h5>
         </div>
-        
+
         <div class="card-body">
-          <div class="d-grid gap-2">
-            <button class="btn btn-outline-primary" routerLink="/announcements/create">
-              <i class="fas fa-plus me-2"></i>Nouvelle annonce
-            </button>
-            <button class="btn btn-outline-info" routerLink="/announcements/history">
-              <i class="fas fa-history me-2"></i>Mes annonces
-            </button>
-            <button class="btn btn-outline-success" routerLink="/messages">
-              <i class="fas fa-comments me-2"></i>Messages
-            </button>
-            <button class="btn btn-outline-warning" routerLink="/notifications">
-              <i class="fas fa-bell me-2"></i>Notifications
-            </button>
+          <!-- Navigation Tabs -->
+          <ul class="nav nav-tabs mb-4" id="messageTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages"
+                type="button" role="tab" aria-controls="messages" aria-selected="true">
+                <i class="fas fa-envelope me-2"></i>Messages
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications"
+                type="button" role="tab" aria-controls="notifications" aria-selected="false">
+                <i class="fas fa-bell me-2"></i>Notifications
+              </button>
+            </li>
+          </ul>
+
+          <!-- Tab Content -->
+          <div class="tab-content" id="messageTabsContent">
+            <!-- Messages Tab -->
+            <div class="tab-pane fade show active" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+              <div class="mb-3">
+                <button class="btn btn-primary btn-sm mb-3" routerLink="/messages">
+                  <i class="fas fa-plus me-2"></i>Accéder aux messages
+                </button>
+
+                <!-- Quick Message Form -->
+                <div class="card border-primary mb-3">
+                  <div class="card-body">
+                    <h6 class="card-title mb-3">
+                      <i class="fas fa-paper-plane me-2"></i>Envoyer un message rapide
+                    </h6>
+                    <form [formGroup]="quickMessageForm" (ngSubmit)="sendQuickMessage()">
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label for="quickRecipientId" class="form-label">Destinataire</label>
+                          <select class="form-select" id="quickRecipientId" formControlName="recipientId"
+                            [class.is-invalid]="quickRecipientId?.invalid && quickRecipientId?.touched">
+                            <option value="">Sélectionner un destinataire</option>
+                            <option *ngFor="let user of availableUsers" [value]="user.id">
+                              Utilisateur {{ user.id }}
+                            </option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="quickRecipientId?.invalid && quickRecipientId?.touched">
+                            Veuillez sélectionner un destinataire
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="quickAnnouncementId" class="form-label">Annonce liée (optionnel)</label>
+                          <select class="form-select" id="quickAnnouncementId" formControlName="announcementId">
+                            <option value="">Aucune annonce</option>
+                            <option *ngFor="let announcement of userAnnouncements" [value]="announcement.id">
+                              {{ announcement.title }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="quickMessageContent" class="form-label">Message</label>
+                        <textarea class="form-control" id="quickMessageContent" formControlName="content" rows="3"
+                          [class.is-invalid]="quickContent?.invalid && quickContent?.touched"
+                          placeholder="Tapez votre message rapide..."></textarea>
+                        <div class="invalid-feedback" *ngIf="quickContent?.invalid && quickContent?.touched">
+                          <span *ngIf="quickContent?.errors?.['required']">Le message est requis</span>
+                          <span *ngIf="quickContent?.errors?.['minlength']">Minimum 10 caractères</span>
+                        </div>
+                        <small class="text-muted mt-1 d-block" *ngIf="quickContent?.value">
+                          {{ quickContent?.value.length }}/500 caractères
+                        </small>
+                      </div>
+                      <div class="d-flex justify-content-end gap-2">
+                        <button type="submit" class="btn btn-primary"
+                          [disabled]="quickMessageForm.invalid || isSendingQuickMessage">
+                          <span *ngIf="isSendingQuickMessage" class="spinner-border spinner-border-sm me-2"></span>
+                          <i class="fas fa-paper-plane me-2" *ngIf="!isSendingQuickMessage"></i>
+                          Envoyer
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <!-- Recent Messages Preview -->
+                <div class="messages-list">
+                  <div class="message-item" *ngFor="let message of recentMessages">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-1">
+                          <strong class="me-2">{{ getSenderName(message) }}</strong>
+                          <small class="text-muted">{{ formatDate(message.createdAt!) }}</small>
+                        </div>
+                        <p class="mb-1">{{ message.content }}</p>
+                        <small class="text-muted" *ngIf="message.announcementId">
+                          Concernant une annonce
+                        </small>
+                      </div>
+                      <div class="message-actions">
+                        <button class="btn btn-sm btn-outline-primary" *ngIf="!message.isRead"
+                          (click)="markMessageAsRead(message.id!)">
+                          Marquer comme lu
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-center py-3" *ngIf="recentMessages.length === 0">
+                    <i class="fas fa-envelope-open fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Aucun message récent</p>
+                    <button class="btn btn-primary btn-sm mt-2" routerLink="/messages">
+                      <i class="fas fa-comments me-2"></i>Voir tous les messages
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div class="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+              <div class="mb-3">
+                <button class="btn btn-success btn-sm mb-3" (click)="markAllNotificationsAsRead()">
+                  <i class="fas fa-check-double me-2"></i>Tout marquer comme lu
+                </button>
+
+                <!-- Notifications List -->
+                <div class="notifications-list">
+                  <div class="notification-item" *ngFor="let notification of userNotifications">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-1">
+                          <i class="fas fa-bell text-warning me-2"></i>
+                          <strong class="me-2">{{ notification.title }}</strong>
+                          <small class="text-muted">{{ formatDate(notification.createdAt!) }}</small>
+                        </div>
+                        <p class="mb-1">{{ notification.message }}</p>
+                      </div>
+                      <div class="notification-actions">
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteNotification(notification.id!)">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-center py-3" *ngIf="userNotifications.length === 0">
+                    <i class="fas fa-bell-slash fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Aucune notification</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -101,19 +258,14 @@
             <i class="fas fa-user me-2"></i>Informations personnelles
           </h5>
         </div>
-        
+
         <div class="card-body p-4">
           <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="firstName" class="form-label fw-semibold">Prénom</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  id="firstName"
-                  formControlName="firstName"
-                  [class.is-invalid]="firstName?.invalid && firstName?.touched"
-                  [readonly]="!isEditing"
+                <input type="text" class="form-control" id="firstName" formControlName="firstName"
+                  [class.is-invalid]="firstName?.invalid && firstName?.touched" [readonly]="!isEditing"
                   placeholder="Votre prénom">
                 <div class="invalid-feedback" *ngIf="firstName?.invalid && firstName?.touched">
                   <span *ngIf="firstName?.errors?.['required']">Le prénom est requis</span>
@@ -123,13 +275,8 @@
 
               <div class="col-md-6 mb-3">
                 <label for="lastName" class="form-label fw-semibold">Nom</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  id="lastName"
-                  formControlName="lastName"
-                  [class.is-invalid]="lastName?.invalid && lastName?.touched"
-                  [readonly]="!isEditing"
+                <input type="text" class="form-control" id="lastName" formControlName="lastName"
+                  [class.is-invalid]="lastName?.invalid && lastName?.touched" [readonly]="!isEditing"
                   placeholder="Votre nom">
                 <div class="invalid-feedback" *ngIf="lastName?.invalid && lastName?.touched">
                   <span *ngIf="lastName?.errors?.['required']">Le nom est requis</span>
@@ -140,13 +287,8 @@
 
             <div class="mb-3">
               <label for="email" class="form-label fw-semibold">Email</label>
-              <input 
-                type="email" 
-                class="form-control" 
-                id="email"
-                formControlName="email"
-                [class.is-invalid]="email?.invalid && email?.touched"
-                [readonly]="!isEditing"
+              <input type="email" class="form-control" id="email" formControlName="email"
+                [class.is-invalid]="email?.invalid && email?.touched" [readonly]="!isEditing"
                 placeholder="votre@email.com">
               <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
                 <span *ngIf="email?.errors?.['required']">L'email est requis</span>
@@ -156,24 +298,16 @@
 
             <div class="mb-4">
               <label for="phone" class="form-label fw-semibold">Téléphone</label>
-              <input 
-                type="tel" 
-                class="form-control" 
-                id="phone"
-                formControlName="phone"
-                [class.is-invalid]="phone?.invalid && phone?.touched"
-                [readonly]="!isEditing"
-                placeholder="06 12 34 56 78">
+              <input type="tel" class="form-control" id="phone" formControlName="phone"
+                [class.is-invalid]="phone?.invalid && phone?.touched" [readonly]="!isEditing"
+                placeholder="+221 77 123 45 67">
               <div class="invalid-feedback" *ngIf="phone?.invalid && phone?.touched">
                 Format de téléphone invalide
               </div>
             </div>
 
             <div class="d-flex justify-content-end" *ngIf="isEditing">
-              <button 
-                type="submit" 
-                class="btn btn-primary"
-                [disabled]="profileForm.invalid || isLoading">
+              <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isLoading">
                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
                 <i class="fas fa-save me-2"></i>
                 {{ isLoading ? 'Sauvegarde...' : 'Sauvegarder' }}
@@ -183,39 +317,6 @@
         </div>
       </div>
 
-      <!-- Annonces récentes -->
-      <div class="card shadow-lg border-0 mt-4">
-        <div class="card-header bg-light d-flex justify-content-between align-items-center">
-          <h5 class="mb-0 text-primary">
-            <i class="fas fa-list me-2"></i>Annonces récentes
-          </h5>
-          <button class="btn btn-primary btn-sm" routerLink="/announcements/create">
-            <i class="fas fa-plus me-1"></i>Nouvelle annonce
-          </button>
-        </div>
-        
-        <div class="card-body">
-          <div class="announcement-item" *ngFor="let announcement of recentAnnouncements">
-            <div class="d-flex justify-content-between align-items-start">
-              <div>
-                <h6 class="mb-1">{{ announcement.title }}</h6>
-                <small class="text-muted">{{ announcement.lostLocation }} • {{ formatDate(announcement.createdAt!) }}</small>
-              </div>
-              <span class="badge" [ngClass]="getStatusBadgeClass(announcement.status)">
-                {{ getStatusLabel(announcement.status) }}
-              </span>
-            </div>
-          </div>
-
-          <div class="text-center py-3" *ngIf="recentAnnouncements.length === 0">
-            <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
-            <p class="text-muted mb-0">Aucune annonce récente</p>
-            <button class="btn btn-primary mt-2" routerLink="/announcements/create">
-              <i class="fas fa-plus me-2"></i>Créer ma première annonce
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

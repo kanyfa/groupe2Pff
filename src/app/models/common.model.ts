@@ -21,3 +21,22 @@ export interface NotificationSettings {
   messageReceived: boolean;
   announcementResolved: boolean;
 }
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ContactMessageRequest {
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+}
+
+export interface ModerationRequest {
+  action: string;
+  reason?: string;
+}

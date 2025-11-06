@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AnnouncementService } from '../../services/announcement.service';
-import { DocumentType, DocumentTypeLabels } from '../../models';
+import { DocumentType, DocumentTypeLabels, DocumentTypeIcons } from '../../models';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -36,7 +36,7 @@ export class EditAnnouncementComponent implements OnInit {
       lostLocation: ['', [Validators.required, Validators.minLength(3)]],
       contactPhone: ['', [Validators.pattern(/^[0-9+\-\s()]+$/)]],
       contactEmail: ['', [Validators.email]],
-      imageUrl: ['']
+      documentPath: ['']
     });
   }
 
@@ -54,13 +54,13 @@ export class EditAnnouncementComponent implements OnInit {
         this.announcementForm.patchValue({
           title: announcement.title,
           description: announcement.description,
-          documentType: announcement.documentType,
-          documentName: announcement.documentName,
+          documentType: announcement.documentType || announcement.document?.documentType,
+          documentName: announcement.holderName || announcement.document?.holderName,
           lostDate: this.formatDateForInput((announcement as any).lossDate || (announcement as any).lostDate),
           lostLocation: (announcement as any).lossLocation || (announcement as any).lostLocation,
           contactPhone: announcement.contactPhone,
           contactEmail: announcement.contactEmail,
-          imageUrl: announcement.imageUrl
+          documentPath: announcement.documentPath
         });
       },
       error: (error) => {
@@ -77,8 +77,21 @@ export class EditAnnouncementComponent implements OnInit {
   onSubmit(): void {
     if (this.announcementForm.valid && this.announcementId) {
       this.isLoading = true;
-      const payload = this.announcementForm.value as any;
-      
+      const formValue = this.announcementForm.value;
+
+      // Map form fields to backend expected fields
+      const payload: any = {
+        title: formValue.title,
+        description: formValue.description,
+        lossDate: formValue.lostDate,
+        lossLocation: formValue.lostLocation,
+        documentType: formValue.documentType,
+        holderName: formValue.documentName,
+        contactPhone: formValue.contactPhone,
+        contactEmail: formValue.contactEmail,
+        documentPath: formValue.documentPath
+      };
+
       this.announcementService.updateAnnouncement(this.announcementId, payload).subscribe({
         next: (response) => {
           this.toastr.success('Annonce modifiée avec succès !');
@@ -100,16 +113,7 @@ export class EditAnnouncementComponent implements OnInit {
   }
 
   getDocumentIcon(type: DocumentType): string {
-    const iconMap: { [key in DocumentType]: string } = {
-      [DocumentType.CARTE_IDENTITE]: 'fas fa-id-card text-primary',
-      [DocumentType.PASSEPORT]: 'fas fa-passport text-danger',
-      [DocumentType.CARTE_GRISE]: 'fas fa-car text-success',
-      [DocumentType.DIPLOME]: 'fas fa-graduation-cap text-warning',
-      [DocumentType.PERMIS_CONDUIRE]: 'fas fa-id-badge text-info',
-      [DocumentType.CARTE_VITALE]: 'fas fa-heartbeat text-success',
-      [DocumentType.AUTRE]: 'fas fa-file-alt text-secondary'
-    };
-    return iconMap[type] || 'fas fa-file-alt text-secondary';
+    return DocumentTypeIcons[type] || 'fas fa-file-alt text-secondary';
   }
 
   get title() { return this.announcementForm.get('title'); }

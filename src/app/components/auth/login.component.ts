@@ -40,12 +40,19 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.isLoading = true;
       const loginRequest: LoginRequest = this.loginForm.value;
-      
+
+      console.log('Login request:', loginRequest);
       this.authService.login(loginRequest).subscribe({
         next: (response) => {
           this.authService.setAuthData(response);
           this.toastr.success('Connexion réussie !');
-          this.router.navigate(['/dashboard']);
+          // Redirect based on user role
+          const user = response.user;
+          if (user && (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')) {
+            this.router.navigate(['/admin-panel']);
+          } else {
+            this.router.navigate(['/announcements']);
+          }
         },
         error: (error) => {
           this.toastr.error('Erreur de connexion. Vérifiez vos identifiants.');

@@ -48,4 +48,34 @@ export class AdminService {
   getStatistics(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/statistics`);
   }
+
+  // User management - additional methods
+  deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${userId}`);
+  }
+
+  createAdmin(adminData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users/admin`, adminData);
+  }
+
+  // Additional admin methods from Swagger
+  moderateAnnouncement(annonceId: number, moderationData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/annonces/${annonceId}/moderate`, moderationData);
+  }
+
+  markExpiredAnnouncements(): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/annonces/mark-expired`, {});
+  }
+
+  getExpiredAnnouncements(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/annonces/expired`);
+  }
+
+  changeUserRole(userId: number, role: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users/${userId}/role`, { role });
+  }
+
+  testRoles(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/test/roles`);
+  }
 }

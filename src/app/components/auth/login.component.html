@@ -1,106 +1,108 @@
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <div class="card shadow-lg border-0">
-        <div class="card-body p-5">
-          <div class="text-center mb-5">
-            <div class="login-icon mb-3">
-              <i class="fas fa-user-circle fa-4x text-primary"></i>
+<div class="auth-container">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="auth-card">
+          <!-- Left Side - Branding -->
+          <div class="auth-left d-none d-lg-flex">
+            <div class="brand-content">
+              <div class="brand-logo mb-4">
+                <i class="fas fa-search fa-3x text-white"></i>
+              </div>
+              <h2 class="brand-title text-white mb-3">Sama Papier</h2>
+              <p class="brand-subtitle text-white-50 mb-4">
+                Rejoignez notre communauté de confiance pour retrouver vos documents perdus.
+              </p>
+              <div class="brand-features">
+                <div class="feature-item mb-3">
+                  <i class="fas fa-shield-alt text-success me-3"></i>
+                  <span>Sécurité garantie</span>
+                </div>
+                <div class="feature-item mb-3">
+                  <i class="fas fa-users text-info me-3"></i>
+                  <span>Communauté solidaire</span>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-clock text-warning me-3"></i>
+                  <span>Rapidité d'action</span>
+                </div>
+              </div>
             </div>
-            <h2 class="fw-bold text-primary mb-2">Connexion</h2>
-            <p class="text-muted">Accédez à votre compte DocRetrouvé</p>
           </div>
 
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="email" class="form-label fw-semibold">
-                  <i class="fas fa-envelope me-2 text-primary"></i>Email
-                </label>
-                <input 
-                  type="email" 
-                  class="form-control form-control-lg" 
-                  id="email"
-                  formControlName="email"
-                  [class.is-invalid]="email?.invalid && email?.touched"
-                  placeholder="votre@email.com">
-                <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
-                  <span *ngIf="email?.errors?.['required']">L'email est requis</span>
-                  <span *ngIf="email?.errors?.['email']">Format d'email invalide</span>
+          <!-- Right Side - Login Form -->
+          <div class="auth-right">
+            <div class="auth-form-container">
+              <div class="text-center mb-5">
+                <div class="auth-icon mb-3">
+                  <i class="fas fa-user-circle fa-4x text-primary"></i>
                 </div>
+                <h2 class="auth-title fw-bold text-primary mb-2">Bienvenue</h2>
+                <p class="auth-subtitle text-muted">Connectez-vous à votre compte</p>
               </div>
 
-              <div class="col-md-6 mb-3">
-                <label for="password" class="form-label fw-semibold">
-                  <i class="fas fa-lock me-2 text-primary"></i>Mot de passe
-                </label>
-                <div class="input-group">
-                  <input 
-                    [type]="showPassword ? 'text' : 'password'" 
-                    class="form-control form-control-lg" 
-                    id="password"
-                    formControlName="password"
-                    [class.is-invalid]="password?.invalid && password?.touched"
+
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+                <div class="form-floating mb-3">
+                  <input type="email" class="form-control form-control-lg" id="email" formControlName="email"
+                    [class.is-invalid]="email?.invalid && email?.touched" placeholder="votre@email.com">
+                  <label for="email">
+                    <i class="fas fa-envelope me-2 text-primary"></i>Email
+                  </label>
+                  <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+                    <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+                    <span *ngIf="email?.errors?.['email']">Format d'email invalide</span>
+                  </div>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control-lg" id="password"
+                    formControlName="password" [class.is-invalid]="password?.invalid && password?.touched"
                     placeholder="Votre mot de passe">
-                  <button 
-                    class="btn btn-outline-secondary" 
-                    type="button" 
-                    (click)="togglePasswordVisibility()">
+                  <label for="password">
+                    <i class="fas fa-lock me-2 text-primary"></i>Mot de passe
+                  </label>
+                  <button class="btn btn-link position-absolute end-0 top-50 translate-middle-y me-3 text-muted"
+                    type="button" (click)="togglePasswordVisibility()" style="z-index: 5;">
                     <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                   </button>
+                  <div class="invalid-feedback" *ngIf="password?.invalid && password?.touched">
+                    <span *ngIf="password?.errors?.['required']">Le mot de passe est requis</span>
+                    <span *ngIf="password?.errors?.['minlength']">Minimum 6 caractères</span>
+                  </div>
                 </div>
-                <div class="invalid-feedback" *ngIf="password?.invalid && password?.touched">
-                  <span *ngIf="password?.errors?.['required']">Le mot de passe est requis</span>
-                  <span *ngIf="password?.errors?.['minlength']">Minimum 6 caractères</span>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">
+                      Se souvenir de moi
+                    </label>
+                  </div>
+                  <a href="#" class="text-primary text-decoration-none fw-semibold">
+                    Mot de passe oublié ?
+                  </a>
                 </div>
-              </div>
-            </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="rememberMe">
-                <label class="form-check-label" for="rememberMe">
-                  Se souvenir de moi
-                </label>
-              </div>
-              <a href="#" class="text-primary text-decoration-none">
-                Mot de passe oublié ?
-              </a>
-            </div>
+                <div class="d-grid mb-4">
+                  <button type="submit" class="btn btn-primary btn-lg" [disabled]="loginForm.invalid || isLoading">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    {{ isLoading ? 'Connexion...' : 'Se connecter' }}
+                  </button>
+                </div>
 
-            <div class="d-grid mb-4">
-              <button 
-                type="submit" 
-                class="btn btn-primary btn-lg"
-                [disabled]="loginForm.invalid || isLoading">
-                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-                <i class="fas fa-sign-in-alt me-2"></i>
-                {{ isLoading ? 'Connexion...' : 'Se connecter' }}
-              </button>
+                <div class="text-center">
+                  <p class="mb-3">
+                    Pas encore de compte ?
+                    <a routerLink="/register" class="text-primary fw-semibold text-decoration-none ms-1">
+                      Créer un compte gratuit
+                    </a>
+                  </p>
+                </div>
+              </form>
             </div>
-
-            <div class="text-center">
-              <div class="divider mb-3">
-                <span class="divider-text">ou</span>
-              </div>
-              
-              <p class="mb-3">
-                Pas encore de compte ? 
-                <a routerLink="/register" class="text-primary fw-semibold text-decoration-none">
-                  Créer un compte gratuit
-                </a>
-              </p>
-              
-              <div class="d-flex justify-content-center gap-3">
-                <a href="#" class="btn btn-outline-primary">
-                  <i class="fab fa-google me-2"></i>Google
-                </a>
-                <a href="#" class="btn btn-outline-primary">
-                  <i class="fab fa-facebook me-2"></i>Facebook
-                </a>
-              </div>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

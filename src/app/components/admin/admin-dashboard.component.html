@@ -4,8 +4,10 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-primary mb-0">
           <i class="fas fa-tachometer-alt me-2"></i>
-          Tableau de bord administrateur
+          Tableau de bord {{ userRole === 'SUPER_ADMIN' ? 'Super Administrateur' : userRole === 'ADMIN' ?
+          'Administrateur' : 'Modérateur' }}
         </h2>
+        <div class="badge bg-secondary fs-6">{{ userRole }}</div>
       </div>
 
       <!-- Statistiques -->
@@ -84,26 +86,35 @@
                 <i class="fas fa-exclamation-triangle me-2"></i>Annonces à modérer
               </h5>
             </div>
-            
+
             <div class="card-body">
               <div class="announcement-item" *ngFor="let announcement of announcements">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                   <h6 class="mb-0">{{ announcement.title }}</h6>
                   <small class="text-muted">{{ formatDate(announcement.createdAt!) }}</small>
                 </div>
-                
+
                 <p class="text-muted small mb-2">{{ announcement.description | slice:0:100 }}...</p>
-                
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <small class="text-info">
+                    <i class="fas fa-id-card me-1"></i>
+                    {{ announcement.document?.documentType || announcement.documentType }}
+                  </small>
+                  <small class="text-warning" *ngIf="announcement.urgent">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Urgent
+                  </small>
+                </div>
+
                 <div class="d-flex gap-2">
-                  <button 
-                    class="btn btn-success btn-sm"
-                    (click)="approveAnnouncement(announcement.id!)">
+                  <button class="btn btn-success btn-sm" (click)="approveAnnouncement(announcement.id!)">
                     <i class="fas fa-check me-1"></i>Approuver
                   </button>
-                  <button 
-                    class="btn btn-danger btn-sm"
-                    (click)="rejectAnnouncement(announcement.id!)">
+                  <button class="btn btn-danger btn-sm" (click)="rejectAnnouncement(announcement.id!)">
                     <i class="fas fa-times me-1"></i>Rejeter
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" *ngIf="userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'" (click)="deleteAnnouncement(announcement.id!)">
+                    <i class="fas fa-trash me-1"></i>Supprimer
                   </button>
                 </div>
               </div>
@@ -124,7 +135,7 @@
                 <i class="fas fa-users me-2"></i>Utilisateurs récents
               </h5>
             </div>
-            
+
             <div class="card-body">
               <div class="user-item" *ngFor="let user of users">
                 <div class="d-flex justify-content-between align-items-center">
@@ -135,23 +146,21 @@
                       <small class="text-muted">{{ user.email }}</small>
                     </div>
                   </div>
-                  
+
                   <div class="d-flex gap-1">
-                    <button 
-                      class="btn btn-success btn-sm"
-                      *ngIf="!user.isActive"
+                    <button class="btn btn-success btn-sm"
+                      *ngIf="!user.isActive && (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN')"
                       (click)="activateUser(user.id!)">
                       <i class="fas fa-user-check"></i>
                     </button>
-                    <button 
-                      class="btn btn-warning btn-sm"
-                      *ngIf="user.isActive"
+                    <button class="btn btn-warning btn-sm"
+                      *ngIf="user.isActive && (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN')"
                       (click)="suspendUser(user.id!)">
                       <i class="fas fa-user-slash"></i>
                     </button>
                   </div>
                 </div>
-                
+
                 <hr class="my-2" *ngIf="user !== users[users.length - 1]">
               </div>
 
@@ -173,26 +182,31 @@
                 <i class="fas fa-bolt me-2"></i>Actions rapides
               </h5>
             </div>
-            
+
             <div class="card-body">
               <div class="row">
-                <div class="col-md-3 mb-2">
-                  <button class="btn btn-outline-primary w-100">
+                <div class="col-md-3 mb-2" *ngIf="userRole !== 'MODERATOR'">
+                  <button class="btn btn-outline-primary w-100" routerLink="/admin/documents">
                     <i class="fas fa-list me-2"></i>Toutes les annonces
                   </button>
                 </div>
-                <div class="col-md-3 mb-2">
-                  <button class="btn btn-outline-info w-100">
+                <div class="col-md-3 mb-2" *ngIf="userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'">
+                  <button class="btn btn-outline-info w-100" routerLink="/admin/users">
                     <i class="fas fa-users me-2"></i>Gestion utilisateurs
                   </button>
                 </div>
-                <div class="col-md-3 mb-2">
-                  <button class="btn btn-outline-warning w-100">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Modération
+                <div class="col-md-3 mb-2" *ngIf="userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'">
+                  <button class="btn btn-outline-secondary w-100" routerLink="/admin/personnes">
+                    <i class="fas fa-address-book me-2"></i>Gestion personnes
                   </button>
                 </div>
                 <div class="col-md-3 mb-2">
-                  <button class="btn btn-outline-success w-100">
+                  <button class="btn btn-outline-warning w-100" routerLink="/admin/announcements">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Modération
+                  </button>
+                </div>
+                <div class="col-md-3 mb-2" *ngIf="userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'">
+                  <button class="btn btn-outline-success w-100" routerLink="/admin/statistics">
                     <i class="fas fa-chart-bar me-2"></i>Statistiques
                   </button>
                 </div>

@@ -14,7 +14,9 @@ export interface User {
 
 export enum UserRole {
   USER = 'USER',
-  ADMIN = 'ADMIN'
+  MODERATOR = 'MODERATOR',
+  ADMIN = 'ADMIN',
+  SUPER_ADMIN = 'SUPER_ADMIN'
 }
 
 export interface LoginRequest {
@@ -32,5 +34,10 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
   token: string;
+  refreshToken?: string;
   user: User;
+}
+
+export interface RefreshRequest {
+  refreshToken: string;
 }

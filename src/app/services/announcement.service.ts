@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConfigService } from './config.service';
-import { Announcement, CreateAnnouncementRequest, AnnouncementSearchFilters, PaginatedResponse } from '../models';
+import { Announcement, CreateAnnouncementRequest, AnnouncementSearchFilters, PaginatedResponse, AnnouncementStats } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,13 @@ export class AnnouncementService {
     this.apiUrl = this.configService.getAnnouncementsUrl();
   }
 
-  getAllAnnouncements(page: number = 0, size: number = 10): Observable<PaginatedResponse<Announcement>> {
+  getAllAnnouncements(page: number = 0, size: number = 10, sortBy: string = 'createdAt', sortDir: string = 'desc'): Observable<PaginatedResponse<Announcement>> {
     const params = new HttpParams()
       .set('page', page.toString())
-      .set('size', size.toString());
-    
+      .set('size', size.toString())
+      .set('sortBy', sortBy)
+      .set('sortDir', sortDir);
+
     return this.http.get<PaginatedResponse<Announcement>>(this.apiUrl, { params });
   }
 
@@ -71,5 +73,62 @@ export class AnnouncementService {
 
   markAsResolved(id: number): Observable<Announcement> {
     return this.http.patch<Announcement>(`${this.apiUrl}/${id}/resolve`, {});
+  }
+
+  getUrgentAnnouncements(page: number = 0, size: number = 10): Observable<PaginatedResponse<Announcement>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PaginatedResponse<Announcement>>(`${this.apiUrl}/urgent`, { params });
+  }
+
+  getAnnouncementStats(): Observable<AnnouncementStats> {
+    return this.http.get<AnnouncementStats>(`${this.apiUrl}/stats`);
+  }
+
+  getMyAnnouncements(page: number = 0, size: number = 10): Observable<PaginatedResponse<Announcement>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PaginatedResponse<Announcement>>(`${this.apiUrl}/my-announcements`, { params });
+  }
+
+  getAnnouncementsByType(type: string, page: number = 0, size: number = 10): Observable<PaginatedResponse<Announcement>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PaginatedResponse<Announcement>>(`${this.apiUrl}/by-type/${type}`, { params });
+  }
+
+  getAnnouncementsByHolder(holderName: string, page: number = 0, size: number = 10): Observable<PaginatedResponse<Announcement>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PaginatedResponse<Announcement>>(`${this.apiUrl}/by-holder/${holderName}`, { params });
+  }
+
+  getAnnouncementsByCity(city: string, page: number = 0, size: number = 10): Observable<PaginatedResponse<Announcement>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PaginatedResponse<Announcement>>(`${this.apiUrl}/by-city/${city}`, { params });
+  }
+
+  extendAnnouncement(id: number): Observable<Announcement> {
+    return this.http.post<Announcement>(`${this.apiUrl}/${id}/extend`, {});
+  }
+
+  cancelAnnouncement(id: number): Observable<Announcement> {
+    return this.http.post<Announcement>(`${this.apiUrl}/${id}/cancel`, {});
+  }
+
+  // Additional announcement methods from Swagger
+  updateAnnouncementStatus(id: number, status: string): Observable<Announcement> {
+    return this.http.put<Announcement>(`${this.apiUrl}/${id}/status`, { status });
   }
 }

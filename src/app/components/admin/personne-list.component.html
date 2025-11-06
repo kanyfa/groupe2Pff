@@ -1,0 +1,200 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="fas fa-users me-2"></i>Gestion des Personnes
+            </h4>
+            <button class="btn btn-light btn-sm" routerLink="/admin/personnes/create">
+              <i class="fas fa-plus me-1"></i>Nouvelle Personne
+            </button>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <!-- Search and Filters -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Rechercher par nom, email, téléphone..."
+                  [(ngModel)]="searchQuery"
+                  (keyup.enter)="searchPersonnes()">
+                <button 
+                  class="btn btn-outline-primary" 
+                  type="button" 
+                  (click)="searchPersonnes()">
+                  <i class="fas fa-search"></i>
+                </button>
+                <button 
+                  class="btn btn-outline-secondary" 
+                  type="button" 
+                  (click)="clearSearch()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 text-end">
+              <div class="btn-group" role="group">
+                <button 
+                  class="btn btn-outline-primary btn-sm" 
+                  (click)="onSort('lastName')">
+                  <i class="fas fa-sort me-1"></i>Nom
+                </button>
+                <button 
+                  class="btn btn-outline-primary btn-sm" 
+                  (click)="onSort('email')">
+                  <i class="fas fa-sort me-1"></i>Email
+                </button>
+                <button 
+                  class="btn btn-outline-primary btn-sm" 
+                  (click)="onSort('createdAt')">
+                  <i class="fas fa-sort me-1"></i>Date
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div *ngIf="isLoading" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div *ngIf="!isLoading" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th (click)="onSort('lastName')" style="cursor: pointer;">
+                    Nom <i class="fas fa-sort ms-1"></i>
+                  </th>
+                  <th (click)="onSort('email')" style="cursor: pointer;">
+                    Email <i class="fas fa-sort ms-1"></i>
+                  </th>
+                  <th>Téléphone</th>
+                  <th>Ville</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let personne of personnes">
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar-sm bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center">
+                        {{ personne.firstName.charAt(0) }}{{ personne.lastName.charAt(0) }}
+                      </div>
+                      <div>
+                        <div class="fw-semibold">{{ personne.firstName }} {{ personne.lastName }}</div>
+                        <small class="text-muted">ID: {{ personne.id }}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <a href="mailto:{{ personne.email }}" class="text-decoration-none">
+                      {{ personne.email }}
+                    </a>
+                  </td>
+                  <td>
+                    <span *ngIf="personne.phone">{{ personne.phone }}</span>
+                    <span *ngIf="!personne.phone" class="text-muted">-</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-light text-dark">{{ personne.city }}</span>
+                  </td>
+                  <td>
+                    <span 
+                      class="badge" 
+                      [class.bg-success]="personne.isVerified"
+                      [class.bg-warning]="!personne.isVerified">
+                      <i class="fas fa-check me-1" *ngIf="personne.isVerified"></i>
+                      <i class="fas fa-clock me-1" *ngIf="!personne.isVerified"></i>
+                      {{ personne.isVerified ? 'Vérifié' : 'En attente' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                      <button 
+                        class="btn btn-outline-primary" 
+                        [title]="personne.isVerified ? 'Dévérifier' : 'Vérifier'"
+                        (click)="personne.isVerified ? unverifyPersonne(personne.id!) : verifyPersonne(personne.id!)">
+                        <i [class]="personne.isVerified ? 'fas fa-times' : 'fas fa-check'"></i>
+                      </button>
+                      <button 
+                        class="btn btn-outline-info" 
+                        title="Voir les détails"
+                        routerLink="/admin/personnes/{{ personne.id }}">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button 
+                        class="btn btn-outline-danger" 
+                        title="Supprimer"
+                        (click)="deletePersonne(personne.id!)">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Empty State -->
+            <div *ngIf="personnes.length === 0" class="text-center py-5">
+              <i class="fas fa-users fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">Aucune personne trouvée</h5>
+              <p class="text-muted">Commencez par ajouter une nouvelle personne.</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <nav *ngIf="totalPages > 1" class="mt-4">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 0">
+                <button 
+                  class="page-link" 
+                  (click)="onPageChange(currentPage - 1)"
+                  [disabled]="currentPage === 0">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+              </li>
+              
+              <li 
+                *ngFor="let page of getPageNumbers()" 
+                class="page-item" 
+                [class.active]="page === currentPage">
+                <button 
+                  class="page-link" 
+                  (click)="onPageChange(page)">
+                  {{ page + 1 }}
+                </button>
+              </li>
+              
+              <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+                <button 
+                  class="page-link" 
+                  (click)="onPageChange(currentPage + 1)"
+                  [disabled]="currentPage === totalPages - 1">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Results Info -->
+          <div class="text-muted text-center mt-3">
+            Affichage de {{ personnes.length }} personne(s) sur {{ totalElements }} total
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { AnnouncementService } from '../../services/announcement.service';
 import { MessageService } from '../../services/message.service';
-import { Announcement, DocumentTypeLabels, CreateMessageRequest } from '../../models';
+import { Announcement, DocumentTypeLabels, CreateMessageRequest, AnnouncementStatus } from '../../models';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 
@@ -70,7 +70,7 @@ export class AnnouncementDetailComponent implements OnInit {
   }
 
   sendMessage(): void {
-    if (this.messageForm.valid && this.announcement) {
+    if (this.messageForm.valid && this.announcement && this.announcement.userId) {
       const message: CreateMessageRequest = {
         content: this.messageForm.value.content,
         receiverId: this.announcement.userId,
@@ -90,13 +90,45 @@ export class AnnouncementDetailComponent implements OnInit {
     }
   }
 
-  formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('fr-FR');
+  formatDate(date: Date | undefined): string {
+    return date ? new Date(date).toLocaleDateString('fr-FR') : 'N/A';
+  }
+
+  getStatusBadgeClass(status: AnnouncementStatus | undefined): string {
+    if (!status) return 'badge-secondary';
+    switch (status) {
+      case AnnouncementStatus.ACTIVE:
+        return 'badge-success';
+      case AnnouncementStatus.RESOLVED:
+        return 'badge-info';
+      case AnnouncementStatus.EXPIRED:
+        return 'badge-warning';
+      case AnnouncementStatus.CANCELLED:
+        return 'badge-danger';
+      default:
+        return 'badge-secondary';
+    }
+  }
+
+  getStatusLabel(status: AnnouncementStatus | undefined): string {
+    if (!status) return 'Inconnue';
+    switch (status) {
+      case AnnouncementStatus.ACTIVE:
+        return 'Active';
+      case AnnouncementStatus.RESOLVED:
+        return 'Résolue';
+      case AnnouncementStatus.EXPIRED:
+        return 'Expirée';
+      case AnnouncementStatus.CANCELLED:
+        return 'Annulée';
+      default:
+        return 'Inconnue';
+    }
   }
 
   canContact(): boolean {
-    return this.announcement?.status === 'ACTIVE' && 
-           this.announcement?.userId !== this.getCurrentUserId();
+    return this.announcement?.status === 'ACTIVE' &&
+      this.announcement?.userId !== this.getCurrentUserId();
   }
 
   getCurrentUserId(): number | undefined {
@@ -127,5 +159,43 @@ export class AnnouncementDetailComponent implements OnInit {
     }
   }
 
+  extendAnnouncement(): void {
+    if (this.announcement && confirm('Êtes-vous sûr de vouloir prolonger cette annonce ?')) {
+      this.announcementService.extendAnnouncement(this.announcement.id!).subscribe({
+        next: (updatedAnnouncement) => {
+          this.announcement = updatedAnnouncement;
+          this.toastr.success('Annonce prolongée avec succès');
+          // Reload the announcement to reflect changes
+          this.loadAnnouncement(this.announcement!.id!);
+        },
+        error: (error) => {
+          this.toastr.error('Erreur lors de la prolongation');
+        }
+      });
+    }
+  }
+
+  cancelAnnouncement(): void {
+    if (this.announcement && confirm('Êtes-vous sûr de vouloir annuler cette annonce ?')) {
+      this.announcementService.cancelAnnouncement(this.announcement.id!).subscribe({
+        next: (updatedAnnouncement) => {
+          this.announcement = updatedAnnouncement;
+          this.toastr.success('Annonce annulée avec succès');
+          // Reload the announcement to reflect changes
+          this.loadAnnouncement(this.announcement!.id!);
+        },
+        error: (error) => {
+          this.toastr.error('Erreur lors de l\'annulation');
+        }
+      });
+    }
+  }
+
   get content() { return this.messageForm.get('content'); }
+
+  getDocumentTypeLabel(documentType: any): string {
+    if (!documentType) return 'Type inconnu';
+    const label = this.documentTypeLabels[documentType as keyof typeof this.documentTypeLabels];
+    return label || 'Type inconnu';
+  }
 }

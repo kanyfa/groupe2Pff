@@ -29,9 +29,10 @@ export class RegisterComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.pattern(/^[0-9+\-\s()]+$/)]],
+      phone: ['', [Validators.pattern(/^[0-9]{2}\s?[0-9]{3}\s?[0-9]{2}\s?[0-9]{2}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
+      confirmPassword: ['', [Validators.required]],
+      acceptTerms: [false, [Validators.requiredTrue]]
     }, { validators: this.passwordMatchValidator });
   }
 
@@ -44,13 +45,13 @@ export class RegisterComponent implements OnInit {
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
+
     if (password && confirmPassword && password.value !== confirmPassword.value) {
       confirmPassword.setErrors({ passwordMismatch: true });
     } else {
       confirmPassword?.setErrors(null);
     }
-    
+
     return null;
   }
 
@@ -61,11 +62,12 @@ export class RegisterComponent implements OnInit {
         firstName: this.registerForm.value.firstName,
         lastName: this.registerForm.value.lastName,
         email: this.registerForm.value.email,
-        phone: this.registerForm.value.phone,
+        phone: this.registerForm.value.phone ? '+221 ' + this.registerForm.value.phone : undefined,
         password: this.registerForm.value.password
       };
-      
-      this.authService.register(registerRequest).subscribe({
+
+      console.log('Register request:', registerRequest);
+      this.authService.signup(registerRequest).subscribe({
         next: (response) => {
           this.authService.setAuthData(response);
           this.toastr.success('Compte créé avec succès !');
@@ -96,4 +98,5 @@ export class RegisterComponent implements OnInit {
   get phone() { return this.registerForm.get('phone'); }
   get password() { return this.registerForm.get('password'); }
   get confirmPassword() { return this.registerForm.get('confirmPassword'); }
+  get acceptTerms() { return this.registerForm.get('acceptTerms'); }
 }

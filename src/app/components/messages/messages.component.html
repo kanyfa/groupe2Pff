@@ -1,45 +1,65 @@
+<!-- Page Header -->
+<div class="page-header bg-gradient-primary">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="page-title text-white">
+          <i class="fas fa-comments me-3"></i>Messages
+        </h1>
+        <p class="page-subtitle text-white-50 mb-0">
+          Gérez vos conversations et communiquez avec les propriétaires d'annonces
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <div class="unread-indicator bg-white rounded-pill px-3 py-2" *ngIf="unreadCount > 0">
+          <span class="unread-badge badge bg-danger me-2">{{ unreadCount }}</span>
+          <span class="unread-text fw-semibold">message{{ unreadCount > 1 ? 's' : '' }} non lu{{ unreadCount > 1 ? 's' :
+            '' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
 <div class="container py-5">
   <div class="row">
     <div class="col-12">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary mb-0">
-          <i class="fas fa-comments me-2"></i>
-          Messages
-          <span class="badge bg-danger ms-2" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
-        </h2>
-      </div>
 
       <div class="row">
         <!-- Liste des conversations -->
         <div class="col-lg-4">
-          <div class="card shadow-lg border-0">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">
-                <i class="fas fa-list me-2"></i>Conversations
-              </h5>
+          <div class="card shadow-lg border-0 h-100">
+            <div class="card-header bg-gradient-primary text-white">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                  <i class="fas fa-list me-2"></i>Conversations
+                </h5>
+                <span class="badge bg-light text-primary" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+              </div>
             </div>
-            
+
             <div class="card-body p-0">
               <!-- Loading -->
-              <div class="text-center py-4" *ngIf="isLoading">
+              <div class="text-center py-5" *ngIf="isLoading">
                 <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden">Chargement...</span>
                 </div>
-                <p class="mt-2 text-muted">Chargement des conversations...</p>
+                <p class="mt-3 text-muted">Chargement des conversations...</p>
               </div>
 
               <!-- Liste des conversations -->
               <div class="conversation-list" *ngIf="!isLoading">
-                <div 
-                  class="conversation-item"
-                  *ngFor="let conversation of conversations"
+                <div class="conversation-item" *ngFor="let conversation of conversations"
                   [class.active]="selectedConversation?.id === conversation.id"
                   (click)="selectConversation(conversation)">
-                  
+
                   <div class="conversation-avatar">
-                    <i class="fas fa-user-circle fa-2x text-primary"></i>
+                    <div class="avatar-circle bg-primary text-white d-flex align-items-center justify-content-center">
+                      {{ getInitials(conversation.participant.firstName, conversation.participant.lastName) }}
+                    </div>
                   </div>
-                  
+
                   <div class="conversation-content">
                     <div class="conversation-header">
                       <h6 class="conversation-name mb-1">
@@ -50,20 +70,26 @@
                       </h6>
                       <small class="text-muted">{{ formatDate(conversation.updatedAt) }}</small>
                     </div>
-                    
-                    <p class="conversation-title mb-1">{{ getConversationTitle(conversation) }}</p>
-                    
-                    <p class="conversation-preview text-muted mb-0" *ngIf="conversation.lastMessage">
-                      {{ conversation.lastMessage.content | slice:0:50 }}...
+
+                    <p class="conversation-title mb-1 text-truncate">{{ getConversationTitle(conversation) }}</p>
+
+                    <p class="conversation-preview text-muted mb-0 small" *ngIf="conversation.lastMessage">
+                      {{ conversation.lastMessage.content | slice:0:40 }}{{ conversation.lastMessage.content.length > 40
+                      ? '...' : '' }}
                     </p>
                   </div>
                 </div>
 
                 <!-- Message si aucune conversation -->
-                <div class="text-center py-4" *ngIf="conversations.length === 0">
-                  <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-                  <h5 class="text-muted">Aucune conversation</h5>
-                  <p class="text-muted">Vous n'avez pas encore de messages.</p>
+                <div class="text-center py-5" *ngIf="conversations.length === 0">
+                  <div class="empty-state">
+                    <i class="fas fa-comments fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">Aucune conversation</h5>
+                    <p class="text-muted">Vous n'avez pas encore de messages.</p>
+                    <button class="btn btn-primary mt-3" routerLink="/announcements">
+                      <i class="fas fa-search me-2"></i>Explorer les annonces
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -74,64 +100,146 @@
         <div class="col-lg-8">
           <div class="card shadow-lg border-0 h-100">
             <!-- En-tête de conversation -->
-            <div class="card-header bg-light" *ngIf="selectedConversation">
+            <div class="card-header bg-gradient-light" *ngIf="selectedConversation">
               <div class="d-flex align-items-center">
-                <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
-                <div>
+                <div class="conversation-header-avatar me-3">
+                  <div class="avatar-circle bg-primary text-white d-flex align-items-center justify-content-center">
+                    {{ getInitials(selectedConversation.participant.firstName,
+                    selectedConversation.participant.lastName) }}
+                  </div>
+                </div>
+                <div class="flex-grow-1">
                   <h5 class="mb-1">
                     {{ selectedConversation.participant.firstName }} {{ selectedConversation.participant.lastName }}
                   </h5>
                   <small class="text-muted">{{ getConversationTitle(selectedConversation) }}</small>
+                </div>
+                <div class="conversation-actions">
+                  <button class="btn btn-outline-secondary btn-sm" (click)="selectedConversation = null">
+                    <i class="fas fa-times"></i>
+                  </button>
                 </div>
               </div>
             </div>
 
             <!-- Messages -->
             <div class="card-body messages-container" *ngIf="selectedConversation">
-              <div class="messages-list">
-                <div 
-                  class="message-item"
-                  *ngFor="let message of messages"
-                  [class.sent]="message.senderId === selectedConversation.participant.id"
-                  [class.received]="message.senderId !== selectedConversation.participant.id">
-                  
+              <div class="messages-list" #messagesContainer>
+                <div class="message-item" *ngFor="let message of messages"
+                  [class.sent]="isMessageFromCurrentUser(message)"
+                  [class.received]="!isMessageFromCurrentUser(message)">
+
+                  <div class="message-avatar" *ngIf="!isMessageFromCurrentUser(message)">
+                    <div class="avatar-circle bg-secondary text-white small">
+                      {{ getInitials(selectedConversation.participant.firstName,
+                      selectedConversation.participant.lastName) }}
+                    </div>
+                  </div>
+
                   <div class="message-content">
-                    <p class="message-text mb-1">{{ message.content }}</p>
-                    <small class="message-time">{{ formatDate(message.createdAt!) }}</small>
+                    <div class="message-bubble">
+                      <p class="message-text mb-1">{{ message.content }}</p>
+                      <small class="message-time">{{ formatDate(message.createdAt!) }}</small>
+                    </div>
+                  </div>
+
+                  <div class="message-avatar" *ngIf="isMessageFromCurrentUser(message)">
+                    <div class="avatar-circle bg-primary text-white small">
+                      {{ getCurrentUserInitials() }}
+                    </div>
                   </div>
                 </div>
 
                 <!-- Message si aucun message -->
-                <div class="text-center py-4" *ngIf="messages.length === 0">
-                  <i class="fas fa-comment fa-2x text-muted mb-2"></i>
-                  <p class="text-muted">Aucun message dans cette conversation</p>
+                <div class="text-center py-5" *ngIf="messages.length === 0">
+                  <div class="empty-messages">
+                    <i class="fas fa-comment-dots fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Aucun message</h5>
+                    <p class="text-muted">Commencez la conversation en envoyant un message</p>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- Zone de saisie -->
-            <div class="card-footer bg-light" *ngIf="selectedConversation">
-              <div class="input-group">
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  placeholder="Tapez votre message..."
-                  #messageInput>
-                <button 
-                  class="btn btn-primary" 
-                  type="button"
-                  (click)="sendMessage(messageInput.value); messageInput.value = ''">
-                  <i class="fas fa-paper-plane"></i>
-                </button>
-              </div>
+            <div class="card-footer bg-white border-top" *ngIf="selectedConversation">
+              <form class="message-form" (ngSubmit)="sendMessage(messageInput.value); messageInput.value = ''">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-lg" placeholder="Tapez votre message..."
+                    #messageInput autocomplete="off" maxlength="500">
+                  <button class="btn btn-primary btn-lg" type="submit" [disabled]="!messageInput.value?.trim()">
+                    <i class="fas fa-paper-plane"></i>
+                    <span class="d-none d-sm-inline ms-2">Envoyer</span>
+                  </button>
+                </div>
+                <small class="text-muted mt-1" *ngIf="messageInput.value">
+                  {{ messageInput.value.length }}/500 caractères
+                </small>
+              </form>
             </div>
 
-            <!-- Message de sélection -->
-            <div class="card-body d-flex align-items-center justify-content-center" *ngIf="!selectedConversation">
-              <div class="text-center">
-                <i class="fas fa-comments fa-4x text-muted mb-3"></i>
-                <h4 class="text-muted">Sélectionnez une conversation</h4>
-                <p class="text-muted">Choisissez une conversation pour voir les messages</p>
+            <!-- Formulaire de nouveau message -->
+            <div class="card-body h-100" *ngIf="!selectedConversation">
+              <div class="new-message-form-container h-100 d-flex align-items-center justify-content-center">
+                <div class="w-100" style="max-width: 500px;">
+                  <div class="card border-primary shadow">
+                    <div class="card-header bg-primary text-white">
+                      <h5 class="mb-0">
+                        <i class="fas fa-plus me-2"></i>Nouveau message
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <form [formGroup]="newMessageForm" (ngSubmit)="sendNewMessage()">
+                        <div class="mb-3">
+                          <label for="recipientId" class="form-label fw-semibold">Destinataire</label>
+                          <select class="form-select" id="recipientId" formControlName="recipientId"
+                            [class.is-invalid]="recipientId?.invalid && recipientId?.touched">
+                            <option value="">Sélectionner un destinataire</option>
+                            <option *ngFor="let user of availableUsers" [value]="user.id">
+                              Utilisateur {{ user.id }}
+                            </option>
+                          </select>
+                          <div class="invalid-feedback" *ngIf="recipientId?.invalid && recipientId?.touched">
+                            Veuillez sélectionner un destinataire
+                          </div>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="announcementId" class="form-label fw-semibold">Annonce liée (optionnel)</label>
+                          <select class="form-select" id="announcementId" formControlName="announcementId">
+                            <option value="">Aucune annonce</option>
+                            <option *ngFor="let announcement of userAnnouncements" [value]="announcement.id">
+                              {{ announcement.title }}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="messageContent" class="form-label fw-semibold">Message</label>
+                          <textarea class="form-control" id="messageContent" formControlName="content" rows="4"
+                            placeholder="Tapez votre message..."
+                            [class.is-invalid]="content?.invalid && content?.touched"></textarea>
+                          <div class="invalid-feedback" *ngIf="content?.invalid && content?.touched">
+                            <span *ngIf="content?.errors?.['required']">Le message est requis</span>
+                            <span *ngIf="content?.errors?.['minlength']">Minimum 10 caractères</span>
+                          </div>
+                          <small class="text-muted mt-1 d-block" *ngIf="content?.value">
+                            {{ content?.value.length }}/500 caractères
+                          </small>
+                        </div>
+
+                        <div class="d-grid">
+                          <button type="submit" class="btn btn-primary"
+                            [disabled]="newMessageForm.invalid || isSendingNewMessage">
+                            <span *ngIf="isSendingNewMessage" class="spinner-border spinner-border-sm me-2"></span>
+                            <i class="fas fa-paper-plane me-2" *ngIf="!isSendingNewMessage"></i>
+                            Envoyer le message
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

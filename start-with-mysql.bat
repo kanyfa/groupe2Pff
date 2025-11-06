@@ -86,3 +86,6 @@ echo Base de données : docufind
 echo Utilisateur admin : admin@sama-papier.com
 echo.
 pause
+
+
+

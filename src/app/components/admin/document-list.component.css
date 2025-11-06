@@ -1,0 +1,30 @@
+.table th {
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+}
+
+.table td { vertical-align: middle; }
+
+.btn-group-sm .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.card-header { border-bottom: 1px solid rgba(0,0,0,.125); }
+
+.pagination .page-link { color: #0d6efd; border-color: #dee2e6; }
+.pagination .page-item.active .page-link { background-color: #0d6efd; border-color: #0d6efd; }
+.pagination .page-link:hover { color: #0a58ca; background-color: #e9ecef; border-color: #dee2e6; }
+
+.badge { font-size: 0.75em; }
+
+@media (max-width: 768px) {
+  .table-responsive { font-size: 0.875rem; }
+  .btn-group-sm .btn { padding: 0.2rem 0.4rem; font-size: 0.8rem; }
+}
+
+
+
+
+

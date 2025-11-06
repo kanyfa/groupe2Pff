@@ -7,17 +7,18 @@ import { AuthService } from '../services/auth.service';
   providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authService.isAuthenticated() && this.authService.isAdmin()) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    const roles = this.authService.getRolesFromToken();
+    const requiredRole = route.data['role'] || 'ADMIN';
+
+    // Check if user has the required role or higher in hierarchy
+    if (this.authService.hasRole(requiredRole)) {
       return true;
-    } else {
-      this.router.navigate(['/unauthorized']);
-      return false;
     }
+
+    this.router.navigate(['/unauthorized']);
+    return false;
   }
 }

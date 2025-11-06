@@ -1,0 +1,175 @@
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-primary mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Statistiques détaillées
+                </h2>
+                <button class="btn btn-primary" (click)="loadStatistics()">
+                    <i class="fas fa-sync-alt me-2"></i>Actualiser
+                </button>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div *ngIf="isLoading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div *ngIf="!isLoading" class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card bg-primary text-white shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ statistics.totalAnnouncements || 0 }}</h4>
+                                    <p class="mb-0">Annonces totales</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-list fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card bg-success text-white shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ statistics.resolvedAnnouncements || 0 }}</h4>
+                                    <p class="mb-0">Annonces résolues</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card bg-info text-white shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ statistics.totalUsers || 0 }}</h4>
+                                    <p class="mb-0">Utilisateurs actifs</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card bg-warning text-white shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ statistics.pendingAnnouncements || 0 }}</h4>
+                                    <p class="mb-0">Annonces en attente</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Statistics -->
+            <div *ngIf="!isLoading" class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-chart-pie me-2"></i>Statistiques par catégorie
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <div class="text-center">
+                                        <h4 class="text-primary">{{ statistics.lostDocuments || 0 }}</h4>
+                                        <p class="text-muted mb-0">Documents perdus</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="text-center">
+                                        <h4 class="text-success">{{ statistics.foundDocuments || 0 }}</h4>
+                                        <p class="text-muted mb-0">Documents trouvés</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h4 class="text-info">{{ statistics.returnedDocuments || 0 }}</h4>
+                                        <p class="text-muted mb-0">Documents restitués</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h4 class="text-warning">{{ statistics.activeAnnouncements || 0 }}</h4>
+                                        <p class="text-muted mb-0">Annonces actives</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar-alt me-2"></i>Statistiques temporelles
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <div class="text-center">
+                                        <h4 class="text-primary">{{ statistics.announcementsThisWeek || 0 }}</h4>
+                                        <p class="text-muted mb-0">Cette semaine</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="text-center">
+                                        <h4 class="text-success">{{ statistics.announcementsThisMonth || 0 }}</h4>
+                                        <p class="text-muted mb-0">Ce mois</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h4 class="text-info">{{ statistics.newUsersThisMonth || 0 }}</h4>
+                                        <p class="text-muted mb-0">Nouveaux utilisateurs</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <h4 class="text-warning">{{ statistics.resolutionsThisMonth || 0 }}</h4>
+                                        <p class="text-muted mb-0">Résolutions ce mois</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Dashboard -->
+            <div class="text-center">
+                <button class="btn btn-outline-primary" routerLink="/admin">
+                    <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

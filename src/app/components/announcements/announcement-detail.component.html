@@ -1,213 +1,360 @@
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="page-title">
+          <i class="fas fa-search me-3"></i>Détails de l'annonce
+        </h1>
+        <p class="page-subtitle">
+          Découvrez tous les détails de cette annonce et contactez le propriétaire si vous avez trouvé le document
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <button class="btn btn-outline-light" routerLink="/announcements">
+          <i class="fas fa-arrow-left me-2"></i>
+          Retour aux annonces
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
 <div class="container py-5" *ngIf="!isLoading && announcement">
   <div class="row">
     <div class="col-lg-8">
-      <!-- Détails de l'annonce -->
-      <div class="card shadow-lg border-0 mb-4">
-        <div class="card-header bg-primary text-white">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <h3 class="mb-0">{{ announcement.title }}</h3>
-              <span class="badge bg-light text-primary fs-6">
-                {{ documentTypeLabels[announcement.document?.documentType || announcement.documentType!] }}
-              </span>
+      <!-- Announcement Header Card -->
+      <div class="announcement-header-card mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="announcement-title-section">
+              <h2 class="announcement-title mb-2">{{ announcement.title }}</h2>
+              <div class="announcement-badges">
+                <span class="badge badge-type">
+                  <i class="fas fa-id-card me-1"></i>
+                  {{ getDocumentTypeLabel(announcement.document?.documentType || announcement.documentType) }}
+                </span>
+                <span class="badge" [ngClass]="getStatusBadgeClass(announcement.status!)">
+                  {{ getStatusLabel(announcement.status!) }}
+                </span>
+                <span class="badge badge-urgent" *ngIf="announcement.urgent">
+                  <i class="fas fa-exclamation-triangle me-1"></i>Urgent
+                </span>
+              </div>
             </div>
-            <div class="d-flex gap-2" *ngIf="isOwner()">
-              <button 
-                class="btn btn-warning btn-sm"
-                (click)="editAnnouncement()">
+            <div class="announcement-actions" *ngIf="isOwner()">
+              <button class="btn btn-outline-warning btn-sm me-2" (click)="editAnnouncement()">
                 <i class="fas fa-edit me-1"></i>Modifier
               </button>
-              <button 
-                class="btn btn-danger btn-sm"
-                (click)="deleteAnnouncement()">
+              <button class="btn btn-outline-info btn-sm me-2" (click)="extendAnnouncement()"
+                *ngIf="announcement?.status === 'ACTIVE'">
+                <i class="fas fa-clock me-1"></i>Prolonger
+              </button>
+              <button class="btn btn-outline-secondary btn-sm me-2" (click)="cancelAnnouncement()"
+                *ngIf="announcement?.status === 'ACTIVE'">
+                <i class="fas fa-ban me-1"></i>Annuler
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteAnnouncement()">
                 <i class="fas fa-trash me-1"></i>Supprimer
               </button>
             </div>
           </div>
-        </div>
-        
-        <div class="card-body p-4">
-          <!-- Informations principales -->
-          <div class="row mb-4">
-            <div class="col-md-6">
-              <div class="info-item mb-3">
-                <i class="fas fa-user text-primary me-2"></i>
-                <strong>Nom sur le document :</strong>
-                <span class="ms-2">{{ announcement.document?.holderName || announcement.documentName }}</span>
+
+          <!-- Quick Info -->
+          <div class="quick-info">
+            <div class="info-row">
+              <div class="info-item">
+                <i class="fas fa-calendar text-primary"></i>
+                <span class="info-label">Perdu le:</span>
+                <span class="info-value">{{ formatDate(announcement.lossDate!) }}</span>
               </div>
-              
-              <div class="info-item mb-3">
-                <i class="fas fa-calendar text-primary me-2"></i>
-                <strong>Date de perte :</strong>
-                <span class="ms-2">{{ formatDate(announcement.lossDate || announcement.lostDate!) }}</span>
+              <div class="info-item">
+                <i class="fas fa-map-marker-alt text-primary"></i>
+                <span class="info-label">Lieu:</span>
+                <span class="info-value">{{ announcement.lossLocation }}</span>
               </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div class="info-item mb-3">
-                <i class="fas fa-map-marker-alt text-primary me-2"></i>
-                <strong>Lieu de perte :</strong>
-                <span class="ms-2">{{ announcement.lossLocation || announcement.lostLocation }}</span>
-              </div>
-              
-              <div class="info-item mb-3">
-                <i class="fas fa-clock text-primary me-2"></i>
-                <strong>Publié le :</strong>
-                <span class="ms-2">{{ formatDate(announcement.createdAt!) }}</span>
+              <div class="info-item">
+                <i class="fas fa-clock text-primary"></i>
+                <span class="info-label">Publié:</span>
+                <span class="info-value">{{ formatDate(announcement.createdAt) }}</span>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- Description -->
-          <div class="mb-4">
-            <h5 class="text-primary mb-3">
-              <i class="fas fa-align-left me-2"></i>Description
-            </h5>
+      <!-- Announcement Details Card -->
+      <div class="announcement-details-card">
+        <!-- Document Details Section -->
+        <div class="details-section mb-4">
+          <h4 class="section-title">
+            <i class="fas fa-id-card me-2"></i>Détails du document
+          </h4>
+          <div class="details-grid">
+            <div class="detail-item">
+              <label class="detail-label">Nom sur le document</label>
+              <div class="detail-value">
+                <i class="fas fa-user text-primary me-2"></i>
+                {{ announcement.document?.holderName || announcement.holderName }}
+              </div>
+            </div>
+            <div class="detail-item" *ngIf="announcement.document?.holderFirstName">
+              <label class="detail-label">Prénom</label>
+              <div class="detail-value">
+                <i class="fas fa-user text-primary me-2"></i>
+                {{ announcement.document?.holderFirstName }}
+              </div>
+            </div>
+            <div class="detail-item" *ngIf="announcement.document?.documentNumber">
+              <label class="detail-label">Numéro du document</label>
+              <div class="detail-value">
+                <i class="fas fa-hashtag text-primary me-2"></i>
+                {{ announcement.document?.documentNumber }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loss Details Section -->
+        <div class="details-section mb-4">
+          <h4 class="section-title">
+            <i class="fas fa-exclamation-triangle me-2"></i>Circonstances de la perte
+          </h4>
+          <div class="details-grid">
+            <div class="detail-item">
+              <label class="detail-label">Date de perte</label>
+              <div class="detail-value">
+                <i class="fas fa-calendar text-primary me-2"></i>
+                {{ formatDate(announcement.lossDate!) }}
+              </div>
+            </div>
+            <div class="detail-item">
+              <label class="detail-label">Lieu de perte</label>
+              <div class="detail-value">
+                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                {{ announcement.lossLocation }}
+                <span *ngIf="announcement.lossCity">, {{ announcement.lossCity }}</span>
+              </div>
+            </div>
+            <div class="detail-item" *ngIf="announcement.lossPostalCode">
+              <label class="detail-label">Code postal</label>
+              <div class="detail-value">
+                <i class="fas fa-map-pin text-primary me-2"></i>
+                {{ announcement.lossPostalCode }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description Section -->
+        <div class="description-section mb-4">
+          <h4 class="section-title">
+            <i class="fas fa-align-left me-2"></i>Description détaillée
+          </h4>
+          <div class="description-content">
             <p class="description-text">{{ announcement.description }}</p>
           </div>
+        </div>
 
-          <!-- Image si disponible -->
-          <div class="mb-4" *ngIf="announcement.imageUrl">
-            <h5 class="text-primary mb-3">
-              <i class="fas fa-image me-2"></i>Image
-            </h5>
-            <img 
-              [src]="announcement.imageUrl" 
-              [alt]="announcement.title"
-              class="img-fluid rounded announcement-image">
-          </div>
-
-          <!-- Informations de contact -->
-          <div class="contact-info" *ngIf="announcement.contactPhone || announcement.contactEmail">
-            <h5 class="text-primary mb-3">
-              <i class="fas fa-phone me-2"></i>Contact
-            </h5>
-            <div class="row">
-              <div class="col-md-6" *ngIf="announcement.contactPhone">
-                <div class="info-item mb-2">
-                  <i class="fas fa-phone text-primary me-2"></i>
-                  <a [href]="'tel:' + announcement.contactPhone" class="text-decoration-none">
-                    {{ announcement.contactPhone }}
-                  </a>
-                </div>
-              </div>
-              <div class="col-md-6" *ngIf="announcement.contactEmail">
-                <div class="info-item mb-2">
-                  <i class="fas fa-envelope text-primary me-2"></i>
-                  <a [href]="'mailto:' + announcement.contactEmail" class="text-decoration-none">
-                    {{ announcement.contactEmail }}
-                  </a>
-                </div>
-              </div>
+        <!-- Document Path Section -->
+        <div class="document-section mb-4" *ngIf="announcement.documentPath">
+          <h4 class="section-title">
+            <i class="fas fa-file me-2"></i>Chemin du document
+          </h4>
+          <div class="document-path-container">
+            <div class="document-path-display">
+              <i class="fas fa-folder-open text-primary me-2"></i>
+              <span class="document-path-text">{{ announcement.documentPath }}</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Formulaire de message -->
-      <div class="card shadow-lg border-0" *ngIf="showMessageForm">
-        <div class="card-header bg-success text-white">
-          <h5 class="mb-0">
-            <i class="fas fa-comment me-2"></i>Envoyer un message
-          </h5>
-        </div>
-        
-        <div class="card-body p-4">
-          <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
-            <div class="mb-3">
-              <label for="content" class="form-label">Votre message</label>
-              <textarea 
-                class="form-control" 
-                id="content"
-                formControlName="content"
-                [class.is-invalid]="content?.invalid && content?.touched"
-                rows="4"
-                placeholder="Décrivez comment vous avez trouvé le document ou toute information utile..."></textarea>
-              <div class="invalid-feedback" *ngIf="content?.invalid && content?.touched">
-                <span *ngIf="content?.errors?.['required']">Le message est requis</span>
-                <span *ngIf="content?.errors?.['minlength']">Minimum 10 caractères</span>
+        <!-- Contact Information Section -->
+        <div class="contact-section" *ngIf="announcement.contactPhone || announcement.contactEmail">
+          <h4 class="section-title">
+            <i class="fas fa-address-book me-2"></i>Informations de contact
+          </h4>
+          <div class="contact-methods">
+            <div class="contact-method" *ngIf="announcement.contactPhone">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-details">
+                <label class="contact-label">Téléphone</label>
+                <a [href]="'tel:' + announcement.contactPhone" class="contact-value">
+                  {{ announcement.contactPhone }}
+                </a>
               </div>
             </div>
-            
-            <div class="d-flex justify-content-end gap-2">
-              <button 
-                type="button" 
-                class="btn btn-outline-secondary"
-                (click)="showMessageForm = false">
-                Annuler
-              </button>
-              <button 
-                type="submit" 
-                class="btn btn-success"
-                [disabled]="messageForm.invalid">
-                <i class="fas fa-paper-plane me-2"></i>Envoyer
-              </button>
+            <div class="contact-method" *ngIf="announcement.contactEmail">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-details">
+                <label class="contact-label">Email</label>
+                <a [href]="'mailto:' + announcement.contactEmail" class="contact-value">
+                  {{ announcement.contactEmail }}
+                </a>
+              </div>
             </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="col-lg-4">
-      <div class="card shadow-lg border-0">
-        <div class="card-header bg-light">
-          <h5 class="mb-0 text-primary">
-            <i class="fas fa-user me-2"></i>Propriétaire
-          </h5>
-        </div>
-        
-        <div class="card-body text-center">
-          <div class="user-avatar mb-3">
-            <i class="fas fa-user-circle fa-4x text-primary"></i>
           </div>
-          
-          <h6 class="mb-1">{{ announcement.user?.firstName }} {{ announcement.user?.lastName }}</h6>
-          <p class="text-muted small mb-3">Membre depuis {{ formatDate(announcement.user?.createdAt!) }}</p>
-          
-          <div class="d-grid gap-2" *ngIf="canContact()">
-            <button 
-              class="btn btn-primary"
-              (click)="toggleMessageForm()">
-              <i class="fas fa-comment me-2"></i>
-              Contacter le propriétaire
-            </button>
-          </div>
-          
-          <div class="alert alert-info mt-3" *ngIf="!canContact()">
-            <i class="fas fa-info-circle me-2"></i>
-            <small>
-              <span *ngIf="announcement.status !== 'ACTIVE'">Cette annonce n'est plus active.</span>
-              <span *ngIf="announcement.userId === getCurrentUserId()">C'est votre propre annonce.</span>
+          <div class="contact-preference" *ngIf="announcement.contactPreference">
+            <small class="text-muted">
+              <i class="fas fa-info-circle me-1"></i>
+              Préférence de contact: {{ announcement.contactPreference === 'EMAIL' ? 'Email' :
+              announcement.contactPreference === 'PHONE' ? 'Téléphone' : 'Email ou téléphone' }}
             </small>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Actions rapides -->
-      <div class="card shadow-lg border-0 mt-4">
-        <div class="card-header bg-light">
-          <h5 class="mb-0 text-primary">
-            <i class="fas fa-bolt me-2"></i>Actions rapides
-          </h5>
-        </div>
-        
-        <div class="card-body">
-          <div class="d-grid gap-2">
-            <button 
-              class="btn btn-outline-primary"
-              routerLink="/announcements">
-              <i class="fas fa-arrow-left me-2"></i>
-              Retour aux annonces
+    <!-- Message Form -->
+    <div class="message-form-card" *ngIf="showMessageForm">
+      <div class="message-form-header">
+        <h5 class="mb-0">
+          <i class="fas fa-comment me-2"></i>Contacter le propriétaire
+        </h5>
+        <p class="mb-0 mt-1 opacity-75">Envoyez un message pour discuter de ce document</p>
+      </div>
+
+      <div class="message-form-body">
+        <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+          <div class="mb-4">
+            <label for="content" class="form-label">
+              <i class="fas fa-envelope me-2 text-success"></i>Votre message
+            </label>
+            <textarea class="form-control" id="content" formControlName="content"
+              [class.is-invalid]="content?.invalid && content?.touched" rows="5"
+              placeholder="Bonjour, j'ai trouvé votre document. Pouvez-vous me donner plus de détails pour vous le restituer ? Décrivez précisément où et comment vous l'avez perdu..."></textarea>
+            <div class="invalid-feedback" *ngIf="content?.invalid && content?.touched">
+              <span *ngIf="content?.errors?.['required']">Le message est requis</span>
+              <span *ngIf="content?.errors?.['minlength']">Minimum 10 caractères</span>
+            </div>
+            <small class="form-text text-muted mt-2">
+              <i class="fas fa-info-circle me-1"></i>
+              Soyez précis dans votre description pour faciliter l'identification du document
+            </small>
+          </div>
+
+          <div class="message-actions">
+            <button type="button" class="btn btn-outline-secondary" (click)="showMessageForm = false">
+              <i class="fas fa-times me-2"></i>Annuler
             </button>
-            
-            <button 
-              class="btn btn-outline-success"
-              routerLink="/announcements/create">
-              <i class="fas fa-plus me-2"></i>
-              Créer une annonce
+            <button type="submit" class="btn btn-success" [disabled]="messageForm.invalid">
+              <i class="fas fa-paper-plane me-2"></i>Envoyer le message
             </button>
           </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="col-lg-4">
+    <!-- Owner Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-header">
+        <h5 class="sidebar-title">
+          <i class="fas fa-user me-2"></i>Propriétaire de l'annonce
+        </h5>
+      </div>
+
+      <div class="sidebar-body text-center">
+        <div class="user-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+
+        <h6 class="user-name">{{ announcement.user?.firstName }} {{ announcement.user?.lastName }}</h6>
+        <p class="user-member-since">Membre depuis {{ formatDate(announcement.user?.createdAt) }}</p>
+
+        <div class="owner-stats mb-3">
+          <div class="stat-item">
+            <span class="stat-value">3</span>
+            <span class="stat-label">Annonces</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">1</span>
+            <span class="stat-label">Résolues</span>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2" *ngIf="canContact()">
+          <button class="btn btn-primary" (click)="toggleMessageForm()">
+            <i class="fas fa-comment me-2"></i>
+            Contacter maintenant
+          </button>
+          <small class="text-muted">
+            <i class="fas fa-shield-alt me-1"></i>
+            Communication sécurisée
+          </small>
+        </div>
+
+        <div class="alert alert-info mt-3" *ngIf="!canContact()">
+          <i class="fas fa-info-circle me-2"></i>
+          <small>
+            <span *ngIf="announcement.status !== 'ACTIVE'">Cette annonce n'est plus active.</span>
+            <span *ngIf="announcement.userId === getCurrentUserId()">C'est votre propre annonce.</span>
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Safety Tips Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-header">
+        <h5 class="sidebar-title">
+          <i class="fas fa-shield-alt me-2"></i>Conseils de sécurité
+        </h5>
+      </div>
+
+      <div class="sidebar-body">
+        <div class="safety-tips">
+          <div class="tip-item mb-3">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            <small>Rencontrez dans un lieu public</small>
+          </div>
+          <div class="tip-item mb-3">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            <small>Vérifiez l'identité du document</small>
+          </div>
+          <div class="tip-item mb-3">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            <small>Préférez les paiements électroniques</small>
+          </div>
+          <div class="tip-item">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            <small>Signalez tout comportement suspect</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-header">
+        <h5 class="sidebar-title">
+          <i class="fas fa-bolt me-2"></i>Actions rapides
+        </h5>
+      </div>
+
+      <div class="sidebar-body">
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-primary" routerLink="/announcements">
+            <i class="fas fa-arrow-left me-2"></i>
+            Retour aux annonces
+          </button>
+
+          <button class="btn btn-outline-success" routerLink="/announcements/create">
+            <i class="fas fa-plus me-2"></i>
+            Publier une annonce
+          </button>
+
+          <button class="btn btn-outline-info" routerLink="/how-it-works">
+            <i class="fas fa-question-circle me-2"></i>
+            Comment ça marche
+          </button>
         </div>
       </div>
     </div>

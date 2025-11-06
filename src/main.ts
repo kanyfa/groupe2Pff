@@ -10,8 +10,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AuthInterceptor } from './app/interceptors/auth.interceptor';
 import { AuthGuard, AdminGuard } from './app/guards';
-import { ConfigService } from './app/services/config.service';
-import { APP_CONSTANTS } from './app/constants/app.constants';
 
 // Routes
 const routes: Routes = [
@@ -28,7 +26,16 @@ const routes: Routes = [
   { path: 'notifications', loadComponent: () => import('./app/components/notifications/notifications.component').then(m => m.NotificationsComponent), canActivate: [AuthGuard] },
   { path: 'how-it-works', loadComponent: () => import('./app/components/pages/how-it-works.component').then(m => m.HowItWorksComponent) },
   { path: 'contact', loadComponent: () => import('./app/components/pages/contact.component').then(m => m.ContactComponent) },
-  { path: 'admin', loadComponent: () => import('./app/components/admin/admin-dashboard.component').then(m => m.AdminDashboardComponent), canActivate: [AdminGuard] },
+  { path: 'unauthorized', loadComponent: () => import('./app/components/pages/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent) },
+  { path: 'admin', loadComponent: () => import('./app/components/admin/admin-dashboard.component').then(m => m.AdminDashboardComponent), canActivate: [AdminGuard], data: { role: 'MODERATOR' } },
+  { path: 'admin-panel', loadComponent: () => import('./app/components/admin/admin.component').then(m => m.AdminComponent) },
+  { path: 'admin/statistics', loadComponent: () => import('./app/components/admin/admin-statistics.component').then(m => m.AdminStatisticsComponent), canActivate: [AdminGuard], data: { role: 'ADMIN' } },
+  { path: 'admin/users', loadComponent: () => import('./app/components/admin/admin-users.component').then(m => m.AdminUsersComponent), canActivate: [AdminGuard], data: { role: 'ADMIN' } },
+  { path: 'admin/personnes', loadComponent: () => import('./app/components/admin/personne-list.component').then(m => m.PersonneListComponent), canActivate: [AdminGuard], data: { role: 'ADMIN' } },
+  { path: 'admin/personnes/create', loadComponent: () => import('./app/components/admin/personne-create.component').then(m => m.PersonneCreateComponent), canActivate: [AdminGuard], data: { role: 'ADMIN' } },
+  { path: 'admin/personnes/:id', loadComponent: () => import('./app/components/admin/personne-detail.component').then(m => m.PersonneDetailComponent), canActivate: [AdminGuard], data: { role: 'ADMIN' } },
+  { path: 'admin/documents', loadComponent: () => import('./app/components/admin/document-list.component').then(m => m.DocumentListComponent), canActivate: [AdminGuard], data: { role: 'MODERATOR' } },
+  { path: 'admin/documents/create', loadComponent: () => import('./app/components/admin/document-create.component').then(m => m.DocumentCreateComponent), canActivate: [AdminGuard], data: { role: 'ADMIN' } },
   { path: '**', redirectTo: '/announcements' }
 ];
 
@@ -41,7 +48,7 @@ bootstrapApplication(AppComponent, {
       BrowserAnimationsModule,
       RouterModule.forRoot(routes),
       ToastrModule.forRoot({
-        timeOut: APP_CONSTANTS.TIMEOUTS.TOAST_DISPLAY,
+        timeOut: 3000,
         positionClass: 'toast-top-right',
         preventDuplicates: true,
       }),

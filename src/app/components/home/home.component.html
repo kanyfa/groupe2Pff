@@ -1,28 +1,195 @@
-<section class="hero">
-  <div class="container text-center">
-    <div class="badge-pill">
-      <i class="fas fa-file-alt me-2"></i>
-      Plateforme de déclaration de documents perdus
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center min-vh-75">
+      <div class="col-lg-6 text-center text-lg-start">
+        <div class="hero-badge mb-4">
+          <i class="fas fa-shield-alt me-2"></i>
+          Plateforme sécurisée et fiable
+        </div>
+
+        <h1 class="hero-title mb-4">
+          Retrouvez vos documents<br />
+          <span class="text-gradient">perdus facilement</span>
+        </h1>
+
+        <p class="hero-subtitle mb-5">
+          Déclarez la perte de vos documents administratifs et recherchez parmi les annonces publiées.
+          Une communauté solidaire pour vous aider à retrouver ce qui vous appartient.
+        </p>
+
+        <div class="hero-cta d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+          <a class="btn btn-primary btn-lg px-5 py-3" routerLink="/announcements/create">
+            <i class="fas fa-file-signature me-2"></i>
+            Déclarer une perte
+          </a>
+          <a class="btn btn-outline-primary btn-lg px-5 py-3" routerLink="/announcements">
+            <i class="fas fa-search me-2"></i>
+            Rechercher
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-6 d-none d-lg-block">
+        <div class="hero-image">
+          <div class="floating-card card-1">
+            <i class="fas fa-id-card fa-2x text-primary"></i>
+            <span class="ms-3">Carte d'identité</span>
+          </div>
+          <div class="floating-card card-2">
+            <i class="fas fa-passport fa-2x text-danger"></i>
+            <span class="ms-3">Passeport</span>
+          </div>
+          <div class="floating-card card-3">
+            <i class="fas fa-car fa-2x text-success"></i>
+            <span class="ms-3">Carte grise</span>
+          </div>
+          <div class="hero-illustration">
+            <i class="fas fa-search fa-6x text-primary opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section py-5">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-card">
+          <div class="stat-number text-primary">500+</div>
+          <div class="stat-label">Documents retrouvés</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-card">
+          <div class="stat-number text-success">1000+</div>
+          <div class="stat-label">Utilisateurs actifs</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-card">
+          <div class="stat-number text-warning">98%</div>
+          <div class="stat-label">Taux de réussite</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-card">
+          <div class="stat-number text-info">24/7</div>
+          <div class="stat-label">Support disponible</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="section-title">Pourquoi choisir Sama Papier ?</h2>
+        <p class="section-subtitle">Une plateforme moderne et sécurisée pour retrouver vos documents</p>
+      </div>
     </div>
 
-    <h1 class="display-4 fw-bold mt-4">
-      Retrouvez vos documents<br/>
-      perdus facilement
-    </h1>
+    <div class="row">
+      <div class="col-lg-4 mb-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon mb-3">
+            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+          </div>
+          <h4 class="feature-title">Sécurité garantie</h4>
+          <p class="feature-description">Vos données sont chiffrées et protégées selon les normes RGPD</p>
+        </div>
+      </div>
 
-    <p class="lead mt-3 text-muted">
-      Déclarez la perte de vos documents administratifs et recherchez parmi les annonces publiées.
-      Une communauté solidaire pour vous aider à retrouver ce qui vous appartient.
-    </p>
+      <div class="col-lg-4 mb-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon mb-3">
+            <i class="fas fa-users fa-3x text-success"></i>
+          </div>
+          <h4 class="feature-title">Communauté solidaire</h4>
+          <p class="feature-description">Rejoignez une communauté d'entraide pour retrouver vos documents</p>
+        </div>
+      </div>
 
-    <div class="cta mt-4 d-flex flex-column flex-md-row gap-3 justify-content-center">
-      <a class="btn btn-primary btn-lg px-4" routerLink="/announcements/create">
-        <i class="fas fa-file-signature me-2"></i>
-        Déclarer une perte
+      <div class="col-lg-4 mb-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon mb-3">
+            <i class="fas fa-clock fa-3x text-warning"></i>
+          </div>
+          <h4 class="feature-title">Rapidité d'action</h4>
+          <p class="feature-description">Publiez votre annonce et recevez des réponses en quelques heures</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="section-title">Comment ça marche ?</h2>
+        <p class="section-subtitle">Simple, rapide et efficace en 3 étapes</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 mb-4">
+        <div class="step-card text-center">
+          <div class="step-number">1</div>
+          <div class="step-icon mb-3">
+            <i class="fas fa-user-plus fa-3x text-primary"></i>
+          </div>
+          <h4 class="step-title">Créez votre compte</h4>
+          <p class="step-description">Inscrivez-vous gratuitement en quelques minutes</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 mb-4">
+        <div class="step-card text-center">
+          <div class="step-number">2</div>
+          <div class="step-icon mb-3">
+            <i class="fas fa-file-signature fa-3x text-success"></i>
+          </div>
+          <h4 class="step-title">Déclarez votre perte</h4>
+          <p class="step-description">Remplissez le formulaire avec les détails de votre document</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 mb-4">
+        <div class="step-card text-center">
+          <div class="step-number">3</div>
+          <div class="step-icon mb-3">
+            <i class="fas fa-handshake fa-3x text-warning"></i>
+          </div>
+          <h4 class="step-title">Récupérez votre document</h4>
+          <p class="step-description">Contactez directement la personne qui l'a trouvé</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-primary text-white">
+  <div class="container text-center">
+    <h2 class="cta-title mb-4">Prêt à retrouver vos documents ?</h2>
+    <p class="cta-subtitle mb-4">Rejoignez des milliers d'utilisateurs qui ont déjà retrouvé leurs documents grâce à
+      Sama Papier</p>
+    <div class="cta-buttons">
+      <a class="btn btn-light btn-lg me-3" routerLink="/register">
+        <i class="fas fa-user-plus me-2"></i>
+        Créer un compte gratuit
       </a>
-      <a class="btn btn-outline-primary btn-lg px-4" routerLink="/announcements">
-        <i class="fas fa-search me-2"></i>
-        Rechercher
+      <a class="btn btn-outline-light btn-lg" routerLink="/how-it-works">
+        <i class="fas fa-info-circle me-2"></i>
+        En savoir plus
       </a>
     </div>
   </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../services/admin.service';
+import { AuthService } from '../../services/auth.service';
 import { Announcement, User, PaginatedResponse } from '../../models';
 import { ToastrService } from 'ngx-toastr';
 
@@ -16,13 +17,18 @@ export class AdminDashboardComponent implements OnInit {
   announcements: Announcement[] = [];
   users: User[] = [];
   isLoading = true;
+  userRole: string = '';
 
   constructor(
     private adminService: AdminService,
+    private authService: AuthService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+    this.userRole = user?.role || '';
+
     this.loadStatistics();
     this.loadAnnouncements();
     this.loadUsers();
@@ -116,6 +122,20 @@ export class AdminDashboardComponent implements OnInit {
         this.toastr.error('Erreur lors de l\'activation');
       }
     });
+  }
+
+  deleteAnnouncement(id: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
+      this.adminService.deleteAnnouncement(id).subscribe({
+        next: () => {
+          this.toastr.success('Annonce supprimée');
+          this.loadAnnouncements();
+        },
+        error: (error) => {
+          this.toastr.error('Erreur lors de la suppression');
+        }
+      });
+    }
   }
 
   formatDate(date: Date): string {

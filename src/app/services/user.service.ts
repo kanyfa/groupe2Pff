@@ -15,6 +15,7 @@ export class UserService {
   }
 
   getCurrentUserProfile(): Observable<User> {
+    console.log('UserService - calling getCurrentUserProfile:', `${this.apiUrl}/profile`);
     return this.http.get<User>(`${this.apiUrl}/profile`);
   }
 
@@ -47,5 +48,18 @@ export class UserService {
 
   deleteUser(userId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/admin/${userId}`);
+  }
+
+
+  getUserById(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${userId}`);
+  }
+
+  getActiveUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/active`);
+  }
+
+  changePassword(changePasswordRequest: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/change-password`, changePasswordRequest);
   }
 }

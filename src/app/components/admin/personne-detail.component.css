@@ -1,0 +1,78 @@
+/* Personne Detail Component Styles */
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+}
+
+.avatar-lg {
+    width: 120px;
+    height: 120px;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.btn-group .btn {
+    margin-right: 0.25rem;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+.card-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.card-body .card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.card-body .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-primary {
+    color: #007bff !important;
+}
+
+.badge {
+    font-size: 0.875rem;
+}
+
+.fas {
+    margin-right: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .avatar-lg {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn-group .btn {
+        margin-right: 0;
+        margin-bottom: 0.25rem;
+    }
+}

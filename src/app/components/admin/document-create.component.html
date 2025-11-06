@@ -1,0 +1,95 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-id-card me-2"></i>Créer un nouveau document
+                        </h4>
+                        <button class="btn btn-light btn-sm" (click)="onCancel()">
+                            <i class="fas fa-arrow-left me-1"></i>Retour
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="documentType" class="form-label">Type de document *</label>
+                                <select class="form-control" id="documentType" formControlName="documentType"
+                                    [class.is-invalid]="documentForm.get('documentType')?.invalid && documentForm.get('documentType')?.touched">
+                                    <option value="">Sélectionner un type</option>
+                                    <option *ngFor="let type of documentTypes" [value]="type.name">
+                                        {{ type.name }}
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback"
+                                    *ngIf="documentForm.get('documentType')?.invalid && documentForm.get('documentType')?.touched">
+                                    Le type de document est requis
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="documentNumber" class="form-label">Numéro du document *</label>
+                                <input type="text" class="form-control" id="documentNumber"
+                                    formControlName="documentNumber" placeholder="Ex: 123456789"
+                                    [class.is-invalid]="documentForm.get('documentNumber')?.invalid && documentForm.get('documentNumber')?.touched">
+                                <div class="invalid-feedback"
+                                    *ngIf="documentForm.get('documentNumber')?.invalid && documentForm.get('documentNumber')?.touched">
+                                    Le numéro du document est requis
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="holderId" class="form-label">Détenteur du document *</label>
+                            <select class="form-control" id="holderId" formControlName="holderId"
+                                [class.is-invalid]="documentForm.get('holderId')?.invalid && documentForm.get('holderId')?.touched">
+                                <option value="">Sélectionner une personne</option>
+                                <option *ngFor="let personne of personnes" [value]="personne.id">
+                                    {{ personne.firstName }} {{ personne.lastName }} - {{ personne.email }}
+                                </option>
+                            </select>
+                            <div class="invalid-feedback"
+                                *ngIf="documentForm.get('holderId')?.invalid && documentForm.get('holderId')?.touched">
+                                Le détenteur est requis
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (optionnel)</label>
+                            <textarea class="form-control" id="description" rows="3" formControlName="description"
+                                placeholder="Description supplémentaire du document...">
+              </textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isUrgent"
+                                    formControlName="isUrgent">
+                                <label class="form-check-label" for="isUrgent">
+                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                    Marquer comme urgent
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-secondary" (click)="onCancel()">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </button>
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="documentForm.invalid || isSubmitting">
+                                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                                <i class="fas fa-save me-2"></i>
+                                {{ isSubmitting ? 'Création...' : 'Créer le document' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

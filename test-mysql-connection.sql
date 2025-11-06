@@ -118,3 +118,6 @@ SELECT
 -- DELETE FROM users WHERE username = 'test_user';
 
 SELECT 'Tests de connexion terminés avec succès!' as result;
+
+
+

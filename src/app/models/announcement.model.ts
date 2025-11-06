@@ -4,13 +4,17 @@ export interface Announcement {
   id?: number;
   title: string;
   description: string;
-  // Nouveau schéma backend
   lossDate?: Date;
   lossLocation?: string;
   lossCity?: string;
   lossPostalCode?: string;
-  isUrgent?: boolean;
-  contactPreference?: 'EMAIL' | 'PHONE' | 'BOTH';
+  rewardAmount?: number;
+  rewardDescription?: string;
+  contactPreference?: string;
+  status?: AnnouncementStatus;
+  contactPhone?: string;
+  contactEmail?: string;
+  documentPath?: string;
   document?: {
     documentType: DocumentType;
     documentNumber?: string;
@@ -18,18 +22,14 @@ export interface Announcement {
     holderFirstName?: string;
     description?: string;
   };
-  // Compatibilité avec l'ancien schéma (champs plats)
+  // Champs plats pour compatibilité
   documentType?: DocumentType;
-  documentName?: string;
-  lostDate?: Date; // ancien
-  lostLocation?: string; // ancien
-  // Commun
-  contactPhone?: string;
-  contactEmail?: string;
-  imageUrl?: string;
-  status: AnnouncementStatus;
-  userId: number;
-  user?: any; // User interface will be imported where needed
+  holderFirstName?: string;
+  holderName?: string;
+  documentNumber?: string;
+  urgent?: boolean;
+  userId?: number;
+  user?: any;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -44,16 +44,17 @@ export enum AnnouncementStatus {
 export interface CreateAnnouncementRequest {
   title: string;
   description: string;
-  lossDate: string | Date;
+  lossDate: string;
   lossLocation: string;
   lossCity?: string;
   lossPostalCode?: string;
-  isUrgent?: boolean;
-  status?: 'ACTIVE' | 'RESOLVED' | 'EXPIRED' | 'CANCELLED';
-  contactPreference?: 'EMAIL' | 'PHONE' | 'BOTH';
+  rewardAmount?: number;
+  rewardDescription?: string;
+  contactPreference?: string;
+  status?: string;
   contactPhone?: string;
   contactEmail?: string;
-  imageUrl?: string;
+  documentPath?: string;
   document: {
     documentType: DocumentType;
     documentNumber?: string;
@@ -61,6 +62,11 @@ export interface CreateAnnouncementRequest {
     holderFirstName?: string;
     description?: string;
   };
+  documentType?: DocumentType;
+  holderFirstName?: string;
+  holderName?: string;
+  documentNumber?: string;
+  urgent?: boolean;
 }
 
 export interface AnnouncementSearchFilters {
@@ -70,4 +76,13 @@ export interface AnnouncementSearchFilters {
   dateFrom?: Date;
   dateTo?: Date;
   status?: AnnouncementStatus;
+}
+
+export interface AnnouncementStats {
+  totalAnnouncements?: number;
+  activeAnnouncements?: number;
+  resolvedAnnouncements?: number;
+  expiredAnnouncements?: number;
+  cancelledAnnouncements?: number;
+  urgentAnnouncements?: number;
 }

@@ -1,29 +1,98 @@
 export interface Document {
   id?: number;
-  type: DocumentType;
-  name: string;
+  documentType: string;
+  documentNumber: string;
+  holderName: string;
+  holderFirstName: string;
+  issueDate?: Date;
+  expiryDate?: Date;
+  issuingAuthority?: string;
   description?: string;
-  imageUrl?: string;
+  status: DocumentStatus;
+  isFound: boolean;
+  foundDate?: Date;
+  foundBy?: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export enum DocumentStatus {
+  LOST = 'LOST',
+  FOUND = 'FOUND',
+  RETURNED = 'RETURNED'
+}
+
+export interface CreateDocumentRequest {
+  documentType: string;
+  documentNumber: string;
+  holderName: string;
+  holderFirstName: string;
+  issueDate?: Date;
+  expiryDate?: Date;
+  issuingAuthority?: string;
+  description?: string;
+}
+
+export interface UpdateDocumentRequest {
+  documentType?: string;
+  documentNumber?: string;
+  holderName?: string;
+  holderFirstName?: string;
+  issueDate?: Date;
+  expiryDate?: Date;
+  issuingAuthority?: string;
+  description?: string;
+  status?: DocumentStatus;
 }
 
 export enum DocumentType {
   CARTE_IDENTITE = 'CARTE_IDENTITE',
   PASSEPORT = 'PASSEPORT',
-  CARTE_GRISE = 'CARTE_GRISE',
-  DIPLOME = 'DIPLOME',
   PERMIS_CONDUIRE = 'PERMIS_CONDUIRE',
   CARTE_VITALE = 'CARTE_VITALE',
+  CARTE_GRISE = 'CARTE_GRISE',
+  DIPLOME = 'DIPLOME',
   AUTRE = 'AUTRE'
 }
 
-export const DocumentTypeLabels = {
-  [DocumentType.CARTE_IDENTITE]: 'Carte Nationale d\'Identité',
-  [DocumentType.PASSEPORT]: 'Passeport',
-  [DocumentType.CARTE_GRISE]: 'Certificat d\'Immatriculation',
-  [DocumentType.DIPLOME]: 'Diplôme/Certificat',
-  [DocumentType.PERMIS_CONDUIRE]: 'Permis de Conduire',
-  [DocumentType.CARTE_VITALE]: 'Carte d\'Assurance Maladie',
-  [DocumentType.AUTRE]: 'Autre Document'
-};
+export interface DocumentTypeInfo {
+  id: number;
+  name: string;
+  description?: string;
+}
+
+export interface DocumentStats {
+  totalCount: number;
+  byType: { [key: string]: number };
+  byStatus: { [key: string]: number };
+  foundCount: number;
+  lostCount: number;
+}
+
+export interface PageDocument {
+  content: Document[];
+  pageable: DocumentPageable;
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
+
+export interface DocumentPageable {
+  sort: DocumentSortObject;
+  offset: number;
+  pageSize: number;
+  pageNumber: number;
+  paged: boolean;
+  unpaged: boolean;
+}
+
+export interface DocumentSortObject {
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
+}

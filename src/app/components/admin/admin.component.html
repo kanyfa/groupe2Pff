@@ -1,0 +1,81 @@
+<div class="admin-dashboard">
+    <h1>Panel d'Administration</h1>
+
+    <!-- Statistiques -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Utilisateurs</h3>
+            <p>{{ statistics.totalUsers || 0 }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Annonces</h3>
+            <p>{{ statistics.totalAnnouncements || 0 }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Messages</h3>
+            <p>{{ statistics.totalMessages || 0 }}</p>
+        </div>
+    </div>
+
+    <!-- Gestion des utilisateurs -->
+    <div class="users-section">
+        <h2>Gestion des Utilisateurs</h2>
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôles</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.firstName }} {{ user.lastName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span class="badge" [style.background-color]="getRoleColor(user.role)"
+                            [style.color]="getRoleTextColor(user.role)"
+                            style="padding: 4px 8px; border-radius: 4px; font-weight: bold;">
+                            {{ user.role }}
+                        </span>
+                    </td>
+                    <td>
+                        <select (change)="changeUserRole(user.id, $event)">
+                            <option value="USER" [selected]="user.role === 'USER'">User</option>
+                            <option value="MODERATOR" [selected]="user.role === 'MODERATOR'">Moderator</option>
+                            <option value="ADMIN" [selected]="user.role === 'ADMIN'">Admin</option>
+                        </select>
+                        <button (click)="activateUser(user.id)" *ngIf="!user.isActive">Activer</button>
+                        <button (click)="suspendUser(user.id)" *ngIf="user.isActive">Suspendre</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Gestion des annonces -->
+    <div class="announcements-section">
+        <h2>Gestion des Annonces</h2>
+        <div *ngFor="let announcement of announcements" class="announcement-card">
+            <h3>{{ announcement.title }}</h3>
+            <p>{{ announcement.description }}</p>
+            <p>
+                Statut:
+                <span class="badge ms-2" [ngClass]="{
+                        'status-pending': announcement.status === 'PENDING',
+                        'status-approved': announcement.status === 'APPROVED',
+                        'status-rejected': announcement.status === 'REJECTED'
+                      }">
+                    {{ announcement.status }}
+                </span>
+            </p>
+            <p>Utilisateur: {{ announcement.user?.firstName }} {{ announcement.user?.lastName }}</p>
+            <button class="btn-approve" (click)="approveAnnouncement(announcement.id)">Approuver</button>
+            <button class="btn-reject" (click)="rejectAnnouncement(announcement.id)">Rejeter</button>
+            <button class="btn-delete" (click)="deleteAnnouncement(announcement.id)">Supprimer</button>
+        </div>
+    </div>
+</div>

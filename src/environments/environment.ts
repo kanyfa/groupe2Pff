@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api',
-  appName: 'Sama Papier',
-  jwtSecret: 'samaPapierSecretKey123456789012345678901234567890',
+  appName: 'Lost Documents App',
+  jwtSecret: 'mySecretKey123456789012345678901234567890',
   jwtExpiration: 86400000,
   uploadDir: 'uploads/',
   maxFileSize: 10485760, // 10MB en bytes
@@ -13,18 +13,18 @@ export const environment = {
   emailConfig: {
     host: 'smtp.gmail.com',
     port: 587,
-    username: 'your-sama-papier-email@gmail.com',
-    password: 'your-sama-papier-app-password'
+    username: 'your-email@gmail.com',
+    password: 'your-app-password'
   },
   oauth2: {
     google: {
-      clientId: 'your-sama-papier-google-client-id',
-      clientSecret: 'your-sama-papier-google-client-secret',
+      clientId: 'your-google-client-id',
+      clientSecret: 'your-google-client-secret',
       scope: 'email,profile'
     }
   },
   database: {
-    url: 'jdbc:mysql://localhost:3306/docufind',
+    url: 'jdbc:mysql://localhost:3306/lost_documents_db',
     driver: 'com.mysql.cj.jdbc.Driver',
     username: 'root',
     password: 'nani',
@@ -32,7 +32,7 @@ export const environment = {
     mysqlEnabled: true,
     host: 'localhost',
     port: 3306,
-    databaseName: 'docufind',
+    databaseName: 'lost_documents_db',
     timezone: 'UTC',
     useSSL: false,
     allowPublicKeyRetrieval: true
