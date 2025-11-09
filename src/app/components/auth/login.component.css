@@ -41,45 +41,7 @@
 .brand-content {
   text-align: center;
   color: white;
-  max-width: 300px;
-  z-index: 1;
-  position: relative;
-}
-
-.brand-logo {
-  animation: float 3s ease-in-out infinite;
-}
-
-.brand-title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.brand-subtitle {
-  font-size: 1rem;
-  line-height: 1.6;
-  opacity: 0.9;
-}
-
-.brand-features {
-  text-align: left;
-  margin-top: 40px;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  font-size: 0.95rem;
-  opacity: 0.9;
-}
-
-/* Right Side - Form */
-.auth-right {
-  flex: 1;
-  padding: 50px;
-  display: flex;
-  align-items: center;
+  /* Form floating / form-control rules are provided globally in src/styles.css */
   justify-content: center;
 }
 
@@ -222,43 +184,7 @@
 }
 
 /* Buttons */
-.btn-primary {
-  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-2) 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--brand-primary-2) 0%, var(--brand-primary) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
-
-.btn-primary:disabled {
-  opacity: 0.7;
-  transform: none;
-  cursor: not-allowed;
-}
-
-.btn-outline-secondary {
-  border-radius: 12px;
-  border: 2px solid #e9ecef;
-  color: #6c757d;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-secondary:hover {
-  background-color: #f8f9fa;
-  border-color: #dee2e6;
-  color: #495057;
-}
+/* Button styles are provided globally in src/styles.css */
 
 /* Links */
 .text-primary {
@@ -271,84 +197,6 @@
   text-decoration: none;
 }
 
-/* Animations */
-@keyframes float {
+/* Animations are centralized in src/styles.css */
 
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.05);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 991.98px) {
-  .auth-card {
-    flex-direction: column;
-    min-height: auto;
-  }
-
-  .auth-left {
-    display: none;
-  }
-
-  .auth-right {
-    padding: 30px 20px;
-  }
-
-  .auth-form-container {
-    max-width: 100%;
-  }
-
-  .auth-title {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .auth-container {
-    padding: 20px 0;
-  }
-
-  .auth-right {
-    padding: 20px 15px;
-  }
-
-  .social-login .btn {
-    font-size: 0.9rem;
-  }
-
-  .btn-primary {
-    padding: 10px 20px;
-    font-size: 0.95rem;
-  }
-}
+/* Responsive helpers live in src/styles.css; keep component-specific overrides if needed. */

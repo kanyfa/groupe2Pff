@@ -89,46 +89,7 @@
 }
 
 /* Form Styles */
-.form-floating {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.form-floating .form-control {
-  height: calc(3.5rem + 2px);
-  border-radius: 12px;
-  border: 2px solid #e9ecef;
-  padding: 1rem 1rem;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.form-floating .form-control:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
-}
-
-.form-floating label {
-  padding: 1rem;
-  font-weight: 500;
-  color: #6c757d;
-  transition: all 0.3s ease;
-}
-
-.form-floating .form-control:focus~label,
-.form-floating .form-control:not(:placeholder-shown)~label {
-  color: var(--brand-primary);
-  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
-}
-
-.form-floating .form-control.is-invalid {
-  border-color: #dc3545;
-}
-
-.form-floating .form-control.is-invalid:focus {
-  border-color: #dc3545;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
-}
+/* Form floating / form-control rules are provided globally in src/styles.css */
 
 /* Form Sections */
 .form-section {
@@ -173,60 +134,7 @@ textarea.form-control {
 }
 
 /* Buttons */
-.btn-primary {
-  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-2) 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 32px;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--brand-primary-2) 0%, var(--brand-primary) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
-
-.btn-primary:disabled {
-  opacity: 0.7;
-  transform: none;
-  cursor: not-allowed;
-}
-
-.btn-outline-secondary {
-  border: 2px solid #6b7280;
-  color: #6b7280;
-  border-radius: 12px;
-  padding: 12px 32px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-secondary:hover {
-  background: #6b7280;
-  border-color: #6b7280;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(107, 114, 128, 0.2);
-}
-
-.btn-outline-light {
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  border-radius: 50px;
-  padding: 10px 24px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-light:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
-  color: white;
-}
+/* Button styles are provided globally in src/styles.css */
 
 /* Invalid Feedback */
 .invalid-feedback {
@@ -271,7 +179,7 @@ textarea.form-control {
   max-width: 100%;
   max-height: 200px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .remove-image-btn {
@@ -295,63 +203,4 @@ textarea.form-control {
   color: white;
 }
 
-/* Responsive Design */
-@media (max-width: 991.98px) {
-  .page-title {
-    font-size: 2rem;
-  }
-
-  .progress-steps {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .progress-steps::before {
-    display: none;
-  }
-
-  .step {
-    flex-direction: row;
-    background: transparent;
-    padding: 0;
-  }
-
-  .step-number {
-    margin-bottom: 0;
-    margin-right: 12px;
-  }
-
-  .step-label {
-    text-align: left;
-  }
-}
-
-@media (max-width: 576px) {
-  .page-header {
-    padding: 40px 0;
-    text-align: center;
-  }
-
-  .page-title {
-    font-size: 1.75rem;
-  }
-
-  .form-card .card-body {
-    padding: 30px 20px;
-  }
-
-  .form-section {
-    padding: 20px;
-  }
-
-  .btn-primary,
-  .btn-outline-secondary {
-    width: 100%;
-    margin-bottom: 12px;
-  }
-
-  .d-flex.justify-content-between {
-    flex-direction: column;
-    gap: 12px;
-  }
-}
+/* Responsive rules are centralized in src/styles.css; keep component-specific responsive overrides here when needed. */

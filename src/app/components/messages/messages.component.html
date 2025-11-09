@@ -167,7 +167,7 @@
                 <div class="input-group">
                   <input type="text" class="form-control form-control-lg" placeholder="Tapez votre message..."
                     #messageInput autocomplete="off" maxlength="500">
-                  <button class="btn btn-primary btn-lg" type="submit" [disabled]="!messageInput.value?.trim()">
+                  <button class="btn btn-primary btn-lg" type="submit" [disabled]="!messageInput.value.trim()">
                     <i class="fas fa-paper-plane"></i>
                     <span class="d-none d-sm-inline ms-2">Envoyer</span>
                   </button>

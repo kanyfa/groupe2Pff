@@ -225,52 +225,7 @@
 }
 
 /* Form Styles */
-.form-floating {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.form-floating .form-control {
-  height: calc(3.5rem + 2px);
-  border-radius: 12px;
-  border: 2px solid #e9ecef;
-  padding: 1rem 1rem;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.form-floating .form-control:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
-}
-
-.form-floating .form-control[readonly] {
-  background-color: #f8fafc;
-  border-color: #e9ecef;
-  color: #6b7280;
-}
-
-.form-floating label {
-  padding: 1rem;
-  font-weight: 500;
-  color: #6c757d;
-  transition: all 0.3s ease;
-}
-
-.form-floating .form-control:focus~label,
-.form-floating .form-control:not(:placeholder-shown)~label {
-  color: var(--brand-primary);
-  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
-}
-
-.form-floating .form-control.is-invalid {
-  border-color: #dc3545;
-}
-
-.form-floating .form-control.is-invalid:focus {
-  border-color: #dc3545;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
-}
+/* form-floating and control states are defined globally in src/styles.css */
 
 .form-label {
   font-weight: 600;
@@ -358,40 +313,7 @@
 }
 
 /* Buttons */
-.btn-primary {
-  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-2) 100%);
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  padding: 12px 24px;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--brand-primary-2) 0%, var(--brand-primary) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
-
-.btn-outline-primary,
-.btn-outline-secondary,
-.btn-outline-info,
-.btn-outline-success,
-.btn-outline-warning {
-  border-radius: 12px;
-  font-weight: 600;
-  padding: 10px 20px;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-secondary:hover,
-.btn-outline-info:hover,
-.btn-outline-success:hover,
-.btn-outline-warning:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+/* Buttons are centralized in src/styles.css */
 
 .btn-outline-light {
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -443,58 +365,4 @@
 }
 
 /* Responsive Design */
-@media (max-width: 991.98px) {
-  .announcements-header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch !important;
-  }
-
-  .page-title {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-header {
-    padding: 40px 0;
-    text-align: center;
-  }
-
-  .page-title {
-    font-size: 1.75rem;
-  }
-
-  .avatar-container {
-    width: 100px;
-    height: 100px;
-  }
-
-  .profile-name {
-    font-size: 1.25rem;
-  }
-
-  .profile-form-body,
-  .announcements-body {
-    padding: 20px;
-  }
-
-  .stat-item {
-    margin-bottom: 12px;
-  }
-
-  .actions-body {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 576px) {
-  .btn-primary {
-    width: 100%;
-    margin-bottom: 8px;
-  }
-
-  .d-flex.justify-content-end {
-    justify-content: center !important;
-  }
-}
+/* Responsive helpers and common utilities are centralized in src/styles.css; keep component-specific overrides if necessary. */
