@@ -56,6 +56,10 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log('onSubmit called, form valid:', this.registerForm.valid);
+    console.log('Form errors:', this.registerForm.errors);
+    console.log('Form value:', this.registerForm.value);
+
     if (this.registerForm.valid) {
       this.isLoading = true;
       const registerRequest: RegisterRequest = {
@@ -67,20 +71,31 @@ export class RegisterComponent implements OnInit {
       };
 
       console.log('Register request:', registerRequest);
+      console.log('Calling authService.signup...');
+
       this.authService.signup(registerRequest).subscribe({
         next: (response) => {
+          console.log('Signup success response:', response);
           this.authService.setAuthData(response);
           this.toastr.success('Compte créé avec succès !');
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
+          console.error('Signup error:', error);
+          console.error('Error status:', error.status);
+          console.error('Error message:', error.message);
+          console.error('Error body:', error.error);
           this.toastr.error('Erreur lors de la création du compte.');
           this.isLoading = false;
         },
         complete: () => {
+          console.log('Signup request completed');
           this.isLoading = false;
         }
       });
+    } else {
+      console.log('Form is invalid, not submitting');
+      this.registerForm.markAllAsTouched();
     }
   }
 

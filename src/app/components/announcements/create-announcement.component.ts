@@ -88,6 +88,7 @@ export class CreateAnnouncementComponent implements OnInit {
       const user = this.authService.getCurrentUser();
       console.log('Token:', token);
       console.log('User:', user);
+      console.log('User id:', user?.id);
       console.log('Is authenticated:', this.authService.isAuthenticated());
 
       const form = this.announcementForm.value as any;
@@ -119,6 +120,9 @@ export class CreateAnnouncementComponent implements OnInit {
       console.log('[CreateAnnouncement] payload sent:', announcement);
       this.announcementService.createAnnouncement(announcement).subscribe({
         next: (response) => {
+          console.log('Create announcement success response:', response);
+          console.log('Response userId:', response.userId);
+          console.log('Response user:', response.user);
           this.toastr.success('Annonce créée avec succès !');
           this.router.navigate(['/announcements']);
         },

@@ -167,6 +167,7 @@ export class AnnouncementsListComponent implements OnInit {
   }
 
   viewAnnouncement(id: number): void {
+    console.log('viewAnnouncement called with id:', id);
     this.router.navigate(['/announcements', id]);
   }
 
@@ -238,9 +239,12 @@ export class AnnouncementsListComponent implements OnInit {
   }
 
   markAsResolved(id: number): void {
+    console.log('markAsResolved called with id:', id);
     if (confirm('Êtes-vous sûr de vouloir marquer cette annonce comme résolue ?')) {
+      console.log('User confirmed, calling announcementService.markAsResolved...');
       this.announcementService.markAsResolved(id).subscribe({
         next: (updatedAnnouncement) => {
+          console.log('markAsResolved success:', updatedAnnouncement);
           const index = this.announcements.findIndex(a => a.id === id);
           if (index !== -1) {
             this.announcements[index] = updatedAnnouncement;
@@ -248,9 +252,12 @@ export class AnnouncementsListComponent implements OnInit {
           this.toastr.success('Annonce marquée comme résolue');
         },
         error: (error) => {
+          console.error('markAsResolved error:', error);
           this.toastr.error('Erreur lors de la résolution');
         }
       });
+    } else {
+      console.log('User cancelled markAsResolved');
     }
   }
 

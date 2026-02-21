@@ -211,7 +211,7 @@ CREATE INDEX idx_messages_sender ON messages(sender_id);
 CREATE INDEX idx_messages_receiver ON messages(receiver_id);
 CREATE INDEX idx_messages_announcement ON messages(announcement_id);
 CREATE INDEX idx_messages_created_at ON messages(created_at);
-
+ 
 CREATE INDEX idx_notifications_user ON notifications(user_id);
 CREATE INDEX idx_notifications_type ON notifications(type);
 CREATE INDEX idx_notifications_is_read ON notifications(is_read);
